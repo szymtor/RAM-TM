@@ -1,0 +1,29 @@
+name = "Lax20Proofs"
+defaultTargets = ["Lax20Proofs"]
+[leanOptions]
+autoImplicit = false
+
+# mathlib is part of the archive environment (the pin is archive-wide)
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "c5ea00351c28e24afc9f0f84379aa41082b1188f"
+
+[[require]]
+name = "Lax20"
+path = "../concepts"
+
+[[require]]
+name = "Lax13"
+git = "https://github.com/lax-archive/lax-submissions"
+rev = "8ffd2b0652bc969e0d674b6f6e5f0444f57799f4"
+subDir = "word-ram/concepts"
+
+[[require]]
+name = "Lax13Proofs"
+git = "https://github.com/lax-archive/lax-submissions"
+rev = "8ffd2b0652bc969e0d674b6f6e5f0444f57799f4"
+subDir = "word-ram/proofs"
+
+[[lean_lib]]
+name = "Lax20Proofs"
