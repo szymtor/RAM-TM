@@ -16,13 +16,13 @@ path = "../concepts"
 [[require]]
 name = "Lax13"
 git = "https://github.com/lax-archive/lax-submissions"
-rev = "8ffd2b0652bc969e0d674b6f6e5f0444f57799f4"
+rev = "d35ba57ad420ce6a6d3c763aa7f6a4a8be1d406d"
 subDir = "word-ram/concepts"
 
 [[require]]
 name = "Lax13Proofs"
 git = "https://github.com/lax-archive/lax-submissions"
-rev = "8ffd2b0652bc969e0d674b6f6e5f0444f57799f4"
+rev = "d35ba57ad420ce6a6d3c763aa7f6a4a8be1d406d"
 subDir = "word-ram/proofs"
 
 [[lean_lib]]
