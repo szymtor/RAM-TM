@@ -66,10 +66,10 @@ theorem FinTM2.compileNativeMachine_outputsInTime_bounded (tm : Turing.FinTM2)
     (FinTM2.outputSymbolCode tm outputAlphabet .one)
     (@finCode tm.σ tm.σFin (Classical.decEq tm.σ) tm.initialState)
     (@finCode tm.Λ tm.ΛFin (Classical.decEq tm.Λ) tm.main)
-  obtain ⟨hbounded, _⟩ := hbig.bigStepB_of_bitGrowth
+  obtain ⟨hbounded, _⟩ := bigStepBigStepBOfBitGrowth hbig
     (initEnv_bitBounded ext x) hgrowth le_rfl
   refine ⟨ext, σ', cost, ?_, hcost, hout⟩
-  apply hbounded.mono
+  refine bigStepBMono ?_ hbounded
   apply pow_mono_exponent
   apply Nat.add_le_add_left
   exact Nat.mul_le_mul_right growth hcost
@@ -98,7 +98,7 @@ theorem FinTM2.compiledRam_outputsInTime (tm : Turing.FinTM2)
     let mainLabelCode := @finCode tm.Λ tm.ΛFin (Classical.decEq tm.Λ) tm.main
     let cmd := FinTM2.compileNativeMachine tm inputStack outputStack separatorIn zeroIn oneIn
       separatorOut zeroOut oneOut initialStateCode mainLabelCode
-    let layout := cmd.canonicalLayout
+    let layout := comCanonicalLayout cmd
     let growth := FinTM2.nativeBitGrowth tm inputStack outputStack separatorIn zeroIn oneIn
       separatorOut zeroOut oneOut initialStateCode mainLabelCode
     let costBound :=
@@ -109,7 +109,7 @@ theorem FinTM2.compiledRam_outputsInTime (tm : Turing.FinTM2)
         (1 + Cond.size (.lt (.lit 0) (.var labelVar)))) +
       (29 * Lax20.BinaryWordEncoding.bitSize y + 19) + 1
     let exponent := Lax20.BinaryWordEncoding.bitSize x + 1 + costBound * growth
-    exponent + layout.bitOverhead ≤ w →
+    exponent + layoutBitOverhead layout ≤ w →
       ∃ t ≤ layout.const * costBound,
         RunsTo w (compileProgram layout cmd) (x.length :: x) y t := by
   dsimp only
@@ -128,7 +128,7 @@ theorem FinTM2.compiledRam_outputsInTime (tm : Turing.FinTM2)
     (FinTM2.outputSymbolCode tm outputAlphabet .one)
     (@finCode tm.σ tm.σFin (Classical.decEq tm.σ) tm.initialState)
     (@finCode tm.Λ tm.ΛFin (Classical.decEq tm.Λ) tm.main)
-  let layout := cmd.canonicalLayout
+  let layout := comCanonicalLayout cmd
   let growth := FinTM2.nativeBitGrowth tm
     (@finCode tm.K tm.kFin tm.kDecidableEq tm.k₀)
     (@finCode tm.K tm.kFin tm.kDecidableEq tm.k₁)
@@ -148,13 +148,13 @@ theorem FinTM2.compiledRam_outputsInTime (tm : Turing.FinTM2)
         (1 + Cond.size (.lt (.lit 0) (.var labelVar)))) +
       (29 * Lax20.BinaryWordEncoding.bitSize y + 19) + 1) * growth
   have hfit : layout.FitsWords (2 ^ exponent) w :=
-    layout.fitsWords_two_pow (by dsimp [exponent]; omega) hw
+    layoutFitsWordsTwoPow layout (by dsimp [exponent]; omega) hw
   have hx : ∀ v ∈ x.length :: x, v < 2 ^ exponent := by
     intro v hv
     have hsmall := (initEnv_bitBounded ext x).inp v hv
     exact hsmall.trans_le (pow_mono_exponent (by dsimp [exponent]; omega))
   obtain ⟨t, ht, htRun⟩ := compileProgram_runsTo hfit
-    (by simpa [layout] using Com.canonicalLayout_ok cmd) hx hbs
+    (by simpa [layout] using comCanonicalLayoutOk cmd) hx hbs
   refine ⟨t, ht.trans ?_, ?_⟩
   · exact Nat.mul_le_mul_left layout.const hcost
   · simpa [cmd, layout, hout] using htRun

@@ -27,7 +27,7 @@ theorem turingPolytime_to_ramPolytime {f : List ℕ → List ℕ}
   let mainLabelCode := @finCode tm.Λ tm.ΛFin (Classical.decEq tm.Λ) tm.main
   let cmd := FinTM2.compileNativeMachine tm inputStack outputStack separatorIn zeroIn oneIn
     separatorOut zeroOut oneOut initialStateCode mainLabelCode
-  let layout := cmd.canonicalLayout
+  let layout := comCanonicalLayout cmd
   let growth := FinTM2.nativeBitGrowth tm inputStack outputStack separatorIn zeroIn oneIn
     separatorOut zeroOut oneOut initialStateCode mainLabelCode
   let guardCost := 1 + Cond.size (.lt (.lit 0) (.var labelVar))
@@ -38,10 +38,10 @@ theorem turingPolytime_to_ramPolytime {f : List ℕ → List ℕ}
   let costPoly : Polynomial ℕ :=
     C constantCost + C 99 * X + C (coreCoeff + 29 * push) * H.time
   let exponentPoly : Polynomial ℕ := X + C 1 + C growth * costPoly
-  let wordPoly : Polynomial ℕ := exponentPoly + C layout.bitOverhead
+  let wordPoly : Polynomial ℕ := exponentPoly + C (layoutBitOverhead layout)
   let ramTimePoly : Polynomial ℕ := C layout.const * costPoly
   have hgrowthOne : 1 ≤ growth := by
-    apply Com.one_le_bitGrowth
+    apply comOneLeBitGrowth
     simpa [growth, cmd, tm, inputStack, outputStack, separatorIn, zeroIn, oneIn,
       separatorOut, zeroOut, oneOut, initialStateCode, mainLabelCode] using
       FinTM2.compileNativeMachine_bitGrowth tm inputStack outputStack separatorIn
@@ -73,7 +73,7 @@ theorem turingPolytime_to_ramPolytime {f : List ℕ → List ℕ}
           (29 * bitSize (f x) + 19) + 1) * growth ≤ exponentPoly.eval n := by
     have hm := Nat.add_le_add_left (Nat.mul_le_mul_right growth hcost) (n + 1)
     simpa [exponentPoly, Nat.mul_comm, Nat.add_assoc] using hm
-  have hwordEval : wordPoly.eval n = exponentPoly.eval n + layout.bitOverhead := by
+  have hwordEval : wordPoly.eval n = exponentPoly.eval n + layoutBitOverhead layout := by
     simp [wordPoly]
   constructor
   · intro a ha
@@ -112,8 +112,8 @@ theorem turingPolytime_to_ramPolytime {f : List ℕ → List ℕ}
             (initializeTablesCost (FinTM2.compileDispatcher tm 0).tables +
               coreCoeff * H.time.eval n + guardCost) +
             (29 * bitSize (f x) + 19) + 1) * growth) +
-          layout.bitOverhead ≤ w := by
-      apply (Nat.add_le_add_right hexponent layout.bitOverhead).trans
+          layoutBitOverhead layout ≤ w := by
+      apply (Nat.add_le_add_right hexponent (layoutBitOverhead layout)).trans
       rw [hwordEval] at hw
       simpa [n] using hw
     obtain ⟨t, ht, hram⟩ := FinTM2.compiledRam_outputsInTime tm
