@@ -12,9 +12,10 @@ natural numbers.
 
 A function is word-RAM computable when there are one program and a
 computable word-length threshold, depending on the input, such that the
-program returns the exact value at every word length at or above that
-threshold. The program is chosen before both the input and the word length,
-so it is uniform. Requiring the threshold to be computable is essential:
+program returns the exact value from the length-prefixed physical input
+`x.length :: x` at every word length at or above that threshold. The program
+is chosen before both the input and the word length, so it is uniform.
+Requiring the threshold to be computable is essential:
 mere eventual stabilization with no effective modulus describes the larger
 class of limit-computable functions.
 
@@ -34,13 +35,13 @@ namespace Lax20.TuringRamEquivalence
 open Lax13.Ram
 
 /-- A total function on finite words is computable by a word RAM if one
-uniform program computes it exactly at every effectively sufficient word
-length. -/
+uniform program computes it from the length-prefixed physical input
+`x.length :: x` at every effectively sufficient word length. -/
 def RamComputable (f : List ℕ → List ℕ) : Prop :=
   ∃ (p : Program) (threshold : List ℕ → ℕ),
     Computable threshold ∧
       ∀ (x : List ℕ) (w : ℕ), threshold x ≤ w →
-        ∃ t : ℕ, RunsTo w p x (f x) t
+        ∃ t : ℕ, RunsTo w p (x.length :: x) (f x) t
 
 /-- **Equivalence of Turing machines and word RAMs.** A total function on
 finite words is computable by the archive's word RAM model exactly when it

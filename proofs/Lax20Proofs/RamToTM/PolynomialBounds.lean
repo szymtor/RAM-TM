@@ -4,6 +4,14 @@ namespace Lax20Proofs.RamToTM
 
 open Polynomial
 
+/-- Natural-coefficient polynomials are monotone on natural arguments. -/
+theorem polynomial_eval_mono (p : Polynomial ℕ) {m n : ℕ} (h : m ≤ n) :
+    p.eval m ≤ p.eval n := by
+  rw [Polynomial.eval_eq_sum, Polynomial.eval_eq_sum]
+  apply Finset.sum_le_sum
+  intro i hi
+  exact Nat.mul_le_mul_left _ (Nat.pow_le_pow_left h i)
+
 /-- A concrete coefficient sum used to dominate a natural-coefficient
 polynomial by one monomial. -/
 def polyCoeffSum (p : Polynomial ℕ) : ℕ :=

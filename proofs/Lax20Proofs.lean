@@ -19,6 +19,7 @@ import Lax20Proofs.TMToRam.BoundedSemantics
 import Lax20Proofs.TMToRam.ValueBounds
 import Lax20Proofs.TMToRam.InterpreterTame
 import Lax20Proofs.TMToRam.NativeBounded
+import Lax20Proofs.TMToRam.Computable
 import Lax20Proofs.TMToRam.Polytime
 import Lax20Proofs.RamToTM.SparseMemory
 import Lax20Proofs.RamToTM.PolynomialBounds
@@ -136,6 +137,8 @@ import Lax20Proofs.RamToTM.StackGrowthBounds
 import Lax20Proofs.RamToTM.FullInputPreprocessor
 import Lax20Proofs.RamToTM.CombinedInterpreter
 import Lax20Proofs.RamToTM.Polytime
+import Lax20Proofs.RamToTM.Computable
+import Lax20Proofs.Computability.RamEvaluator
 import Lax20Proofs.TuringRamPolytimeEquivalence
 import Lax20Proofs.RamToTM.CanonicalPaddingMacro
 import Lax20Proofs.RamToTM.CoreInitialization
