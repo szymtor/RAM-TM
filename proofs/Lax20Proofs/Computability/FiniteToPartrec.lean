@@ -113,7 +113,9 @@ namespace PartrecFiniteTM2
 
 open ToPartrec Turing.PartrecToTM2
 
-deriving instance Fintype for K'
+instance instFintypeK'_lax20Proofs : Fintype K' where
+  elems := {.main, .rev, .aux, .stack}
+  complete x := by cases x <;> simp
 
 private theorem cfg_ext {K Γ Λ σ} {a b : TM2.Cfg (K := K) Γ Λ σ}
     (hl : a.l = b.l) (hv : a.var = b.var) (hs : a.stk = b.stk) : a = b := by
