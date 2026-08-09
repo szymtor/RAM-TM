@@ -139,6 +139,7 @@ import Lax20Proofs.RamToTM.CombinedInterpreter
 import Lax20Proofs.RamToTM.Polytime
 import Lax20Proofs.RamToTM.Computable
 import Lax20Proofs.Computability.RamEvaluator
+import Lax20Proofs.TuringRamEquivalence
 import Lax20Proofs.TuringRamPolytimeEquivalence
 import Lax20Proofs.RamToTM.CanonicalPaddingMacro
 import Lax20Proofs.RamToTM.CoreInitialization
