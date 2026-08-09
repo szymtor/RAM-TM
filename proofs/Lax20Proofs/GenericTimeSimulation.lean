@@ -19,7 +19,7 @@ private theorem map_refl_invFun (xs : List Symbol) :
       change a :: List.map (Equiv.refl Symbol).invFun xs = a :: xs
       rw [ih]
 
-/-
+/--
 ---
 conclusion: Lax20.TuringToRamGenericTime.turingWithInputTime_to_ramInPolynomialOverhead
 ---
@@ -38,7 +38,7 @@ theorem turingWithInputTime_to_ramInPolynomialOverhead
   exact Lax20Proofs.TMToRam.turingWithInputTime_to_ramInPolynomialOverhead
     H time hrun
 
-/-
+/--
 ---
 conclusion: Lax20.RamToTuringGenericTime.ramInTime_to_turingInPolynomialOverhead
 ---
