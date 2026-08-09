@@ -151,6 +151,7 @@ import Lax20Proofs.Computability.RamEvaluator
 import Lax20Proofs.Computability.SparseRam
 import Lax20Proofs.Computability.SparseRamBasic
 import Lax20Proofs.Computability.ToPartrecList
+import Lax20Proofs.GenericTimeSimulation
 import Lax20Proofs.TuringRamEquivalence
 import Lax20Proofs.TuringRamPolytimeEquivalence
 import Lax20Proofs.RamToTM.CanonicalPaddingMacro

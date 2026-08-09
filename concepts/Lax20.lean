@@ -1,5 +1,7 @@
 import Lax20.BinaryWordEncoding
+import Lax20.RamToTuringGenericTime
 import Lax20.RamPolytime
+import Lax20.TuringToRamGenericTime
 import Lax20.TuringRamEquivalence
 import Lax20.TuringRamPolytimeEquivalence
 import Lax20.TuringPolytime
