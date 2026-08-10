@@ -1,10 +1,11 @@
 specVersion: "1"
-id: Lax20
+id: lax-51
 leanVersion: "v4.30.0"
 mathlibVersion: "c5ea00351c28e24afc9f0f84379aa41082b1188f"
 title: Computability and polynomial-time equivalence of Turing machines and word RAMs
 authors:
   - name: Szymon Toruńczyk
+    github: szymtor
   - name: Codex 5.6
 bibEntries:
   - "@book{AhoHopcroftUllman1974,\n  author = {Aho, Alfred V. and Hopcroft, John E. and Ullman, Jeffrey D.},\n  title = {The Design and Analysis of Computer Algorithms},\n  publisher = {Addison-Wesley},\n  year = {1974}\n}"

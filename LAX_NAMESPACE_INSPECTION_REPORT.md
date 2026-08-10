@@ -2,16 +2,16 @@
 
 ## Summary
 
-`lax build` rejects the Lax20 proof package because its namespace check reports
+`lax build` rejects the Lax51 proof package because its namespace check reports
 declarations under `Lax13Proofs`, `Turing.TM2`, `Lax13.Ram`, and `Option` as
-declarations of `Lax20Proofs`.
+declarations of `Lax51Proofs`.
 
-Some reported declarations are extension lemmas authored by Lax20 in an
+Some reported declarations are extension lemmas authored by Lax51 in an
 upstream namespace. Those violations are technically consistent with the
 current namespace rule, although repairing them requires a nontrivial API
 refactor. Other reported declarations are Lean-generated `match_1.splitter`
 declarations for imported definitions. Those have no declaration or name in
-the Lax20 source that can be renamed.
+the Lax51 source that can be renamed.
 
 The latter behavior appears inconsistent with the specification's statement
 that realized lemmas for imported constants are internal details and are
@@ -20,7 +20,7 @@ dropped before applying the namespace check.
 ## Environment
 
 - Lax CLI: `0.1.17`
-- Submission: `Lax20`
+- Submission: `Lax51`
 - Submission toolchain: Lean `v4.30.0`
 - Mathlib revision: `c5ea00351c28e24afc9f0f84379aa41082b1188f`
 - Upstream word-RAM revision: `8ffd2b0652bc969e0d674b6f6e5f0444f57799f4`
@@ -39,10 +39,10 @@ namespace violations.
 Representative diagnostics:
 
 ```text
-[namespace] proof declaration Turing.TM2.step.match_1.splitter does not carry the namespace prefix `Lax20Proofs`
-[namespace] proof declaration Option.getD.match_1.splitter does not carry the namespace prefix `Lax20Proofs`
-[namespace] proof declaration Lax13.Ram.Op.value.match_1.splitter does not carry the namespace prefix `Lax20Proofs`
-[namespace] proof declaration Lax13Proofs.Imp.Expr.evalB_mono does not carry the namespace prefix `Lax20Proofs`
+[namespace] proof declaration Turing.TM2.step.match_1.splitter does not carry the namespace prefix `Lax51Proofs`
+[namespace] proof declaration Option.getD.match_1.splitter does not carry the namespace prefix `Lax51Proofs`
+[namespace] proof declaration Lax13.Ram.Op.value.match_1.splitter does not carry the namespace prefix `Lax51Proofs`
+[namespace] proof declaration Lax13Proofs.Imp.Expr.evalB_mono does not carry the namespace prefix `Lax51Proofs`
 ```
 
 ## Two distinct classes of diagnostics
@@ -52,20 +52,20 @@ Representative diagnostics:
 The files below deliberately add definitions and theorems to namespaces owned
 by `Lax13Proofs`:
 
-- `proofs/Lax20Proofs/TMToRam/CanonicalLayout.lean`
-- `proofs/Lax20Proofs/TMToRam/BoundedSemantics.lean`
-- `proofs/Lax20Proofs/TMToRam/ValueBounds.lean`
+- `proofs/Lax51Proofs/TMToRam/CanonicalLayout.lean`
+- `proofs/Lax51Proofs/TMToRam/BoundedSemantics.lean`
+- `proofs/Lax51Proofs/TMToRam/ValueBounds.lean`
 
 Examples include `Lax13Proofs.Imp.Expr.evalB_mono`,
 `Lax13Proofs.Imp.Com.canonicalLayout`, and
 `Lax13Proofs.Compile.Layout.bitOverhead`.
 
-These can be moved into Lax20-owned namespaces, but simple substitution of the
+These can be moved into Lax51-owned namespaces, but simple substitution of the
 enclosing namespace is insufficient. A declaration written as `Expr.foo`
 resolves `Expr` to the imported `Lax13Proofs.Imp.Expr` namespace, so Lean still
 creates the old fully qualified name. A workaround must:
 
-1. give every extension declaration an explicitly Lax20-owned name;
+1. give every extension declaration an explicitly Lax51-owned name;
 2. replace dot/field notation such as `e.bitGrowth`, `c.canonicalLayout`, and
    `σ.BitBounded` throughout downstream files; and
 3. open/import the new extension namespaces only after their defining modules.
@@ -75,7 +75,7 @@ change.
 
 ### 2. Generated declarations for imported definitions
 
-The following names do not occur in the Lax20 source:
+The following names do not occur in the Lax51 source:
 
 - `Turing.TM2.step.match_1.splitter`
 - `Option.getD.match_1.splitter`
@@ -85,8 +85,8 @@ The following names do not occur in the Lax20 source:
 - `Lax13.Ram.run.match_1.splitter`
 
 They are generated when Lean realizes match/equation support for imported
-definitions. There is no source-level name in Lax20 to substitute. These
-diagnostics therefore cannot be repaired by renaming Lax20 declarations.
+definitions. There is no source-level name in Lax51 to substitute. These
+diagnostics therefore cannot be repaired by renaming Lax51 declarations.
 
 ## Expected behavior
 
@@ -104,7 +104,7 @@ This expectation follows the Lax specification's inspection discussion:
 
 The inspector/build pipeline classifies the generated splitter declarations as
 proof-package declarations and then tests their imported namespaces against the
-`Lax20Proofs` prefix. This makes a valid source-level rename impossible for
+`Lax51Proofs` prefix. This makes a valid source-level rename impossible for
 that class of violations.
 
 ## Suggested maintainer investigation
@@ -123,7 +123,7 @@ that class of violations.
 ## Other issues found and already repaired locally
 
 - The polynomial-time equivalence theorem now has valid Lax `conclusion:`
-  metadata and lives under `Lax20Proofs`.
+  metadata and lives under `Lax51Proofs`.
 - The corresponding concept claim is a Lax statement axiom.
 - Uses of `native_decide` on the RAM-to-TM proof path were replaced by
   kernel-reducible `decide`, removing the associated private native-decide
@@ -138,4 +138,4 @@ These are independent of the namespace-inspection problem:
 
 - the current folder is not recognized by Lax as being inside a Git repository;
 - the required Lax13 record is currently reported as a draft, so registration
-  of Lax20 will require Lax13 to be registered first.
+  of Lax51 will require Lax13 to be registered first.
