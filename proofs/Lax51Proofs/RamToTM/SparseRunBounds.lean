@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.LookupCellMachine
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 theorem sparseEffect_inp_length_le {w : ℕ} {i : Instr} {s s' : SparseState}
     (h : sparseEffect w i s = some s') : s'.inp.length ≤ s.inp.length := by

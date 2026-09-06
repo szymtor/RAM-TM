@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.InterpreterDispatcher
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 noncomputable section
 
@@ -197,6 +197,11 @@ def finitePrepareInstr (p : Program) (N : Nat)
           let bo := BoundedOp.ofOp o (by simpa [instrArgument] using harg)
           exact finiteInitializeEntry (operandArgument o) (by simpa [instrArgument] using harg)
             (encodeBitwiseLabel pc .xor bo
+              (by simpa [bo] using operandEvalStartLabel o))
+  | compl o =>
+          let bo := BoundedOp.ofOp o (by simpa [instrArgument] using harg)
+          exact finiteInitializeEntry (operandArgument o) (by simpa [instrArgument] using harg)
+            (encodeBitwiseLabel pc .compl bo
               (by simpa [bo] using operandEvalStartLabel o))
   | shiftl o =>
           let bo := BoundedOp.ofOp o (by simpa [instrArgument] using harg)

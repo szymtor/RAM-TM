@@ -3,7 +3,7 @@ import Lax51Proofs.RamToTM.IndirectOperandPipeline
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 def operandArgument : Op -> Nat
   | .lit n | .mem n | .ind n => n

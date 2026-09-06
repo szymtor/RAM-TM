@@ -1,5 +1,6 @@
 import Lax51Proofs.RamToTM.PolynomialBounds
 import Mathlib.Data.Nat.Bitwise
+import Mathlib.Data.Nat.ModEq
 
 namespace Lax51Proofs.RamToTM
 
@@ -116,6 +117,36 @@ theorem fixedBits_xor (w a b : ℕ) :
       rw [Nat.xor_bit]
       simp only [fixedBits, Nat.bodd_bit, Nat.div2_bit, zipBits]
       exact congrArg ((xor a.bodd b.bodd) :: ·) (ih a.div2 b.div2)
+
+/-- Complementing a fixed-width bit list flips every bit within its width. -/
+theorem bitsValue_complement_add (bs : List Bool) :
+    bitsValue (bs.map Bool.not) + bitsValue bs + 1 = 2 ^ bs.length := by
+  induction bs with
+  | nil => simp [bitsValue]
+  | cons b bs ih =>
+      cases b <;> simp [bitsValue, Nat.bit_val, pow_succ] at * <;> omega
+
+theorem zipBits_complement (as bs : List Bool) (h : as.length = bs.length) :
+    zipBits (fun a _ => !a) as bs = as.map Bool.not := by
+  induction as generalizing bs with
+  | nil => simp [zipBits]
+  | cons a as ih =>
+      cases bs with
+      | nil => simp at h
+      | cons b bs => simp [zipBits, ih bs (by simpa using h)]
+
+theorem fixedBits_complement (w a b : Nat) :
+    fixedBits w (2 ^ w - 1 - a % 2 ^ w) =
+      zipBits (fun a _ => !a) (fixedBits w a) (fixedBits w b) := by
+  rw [zipBits_complement _ _ (by simp)]
+  apply bitsValue_injective_of_length
+  · simp
+  · have h := bitsValue_complement_add (fixedBits w a)
+    simp only [bitsValue_fixedBits, fixedBits_length] at h ⊢
+    have hpos := Nat.two_pow_pos w
+    have hlt : 2 ^ w - 1 - a % 2 ^ w < 2 ^ w := by omega
+    rw [Nat.mod_eq_of_lt hlt]
+    omega
 
 /-- One-bit full adder, returning `(sum, carry)`. -/
 def fullAdder (a b carry : Bool) : Bool × Bool :=

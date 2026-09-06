@@ -69,7 +69,7 @@ theorem encodeSparseState_length_le {w t : ℕ} {s : SparseState}
   have hm := Nat.mul_le_mul_right (2 * w + 3) hmem
   omega
 
-theorem sparseRun_encoded_memory_le {w t : ℕ} {p : Lax13.Ram.Program}
+theorem sparseRun_encoded_memory_le {w t : ℕ} {p : Lax51Proofs.Microcode.Program}
     {x : List ℕ} {s : SparseState}
     (hrun : sparseRun w p t (sparseInitState x) = some s) :
     (encodeSparseMemory w s.mem).length ≤ t * (2 * w + 3) := by

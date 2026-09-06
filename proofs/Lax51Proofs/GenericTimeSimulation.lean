@@ -58,14 +58,15 @@ theorem ramInTime_to_turingInPolynomialOverhead
                 (some (List.map H.outputAlphabet.invFun (encode output)))
                 (timeOverhead.eval (bitSize x + t))) := by
   obtain ⟨timeOverhead, hsim⟩ :=
-    Lax51Proofs.RamToTM.ramInTime_to_turingInPolynomialOverhead p wordBound
+    Lax51Proofs.RamToTM.ramInTime_to_turingInPolynomialOverhead
+      (CellToMicrocode.compile p) wordBound
   let widthOverhead : Polynomial ℕ :=
     polynomialSimpleMajorant wordBound + 1
   let H : TM2ComputableAux Symbol Symbol := {
-    tm := ramSimulationTM p wordBound
+    tm := ramSimulationTM (CellToMicrocode.compile p) wordBound
     inputAlphabet := Equiv.refl Symbol
     outputAlphabet := Equiv.refl Symbol }
-  refine ⟨H, widthOverhead, timeOverhead, ?_, ?_⟩
+  refine ⟨H, widthOverhead, timeOverhead.comp (3 * Polynomial.X), ?_, ?_⟩
   · intro n
     calc
       wordBound.eval n ≤ (polynomialSimpleMajorant wordBound).eval n :=
@@ -77,7 +78,7 @@ theorem ramInTime_to_turingInPolynomialOverhead
         RunsTo (simulationWordWidth wordBound x) p
           (x.length :: x) output t := by
       simpa [simulationWordWidth, widthOverhead] using hrun
-    have htm := hsim x output t hfits hrun'
+    obtain ⟨htm⟩ := hsim x output (3 * t) hfits (CellToMicrocode.runsTo hrun')
     have hinputMap :
         List.map H.inputAlphabet.invFun (encode x) = encode x := by
       dsimp [H]
@@ -87,6 +88,9 @@ theorem ramInTime_to_turingInPolynomialOverhead
       dsimp [H]
       exact map_refl_invFun (encode output)
     rw [hinputMap, houtputMap]
-    exact htm
+    refine ⟨{ htm with steps_le_m := htm.steps_le_m.trans ?_ }⟩
+    simp only [Polynomial.eval_comp, Polynomial.eval_mul,
+      Polynomial.eval_ofNat, Polynomial.eval_X]
+    exact polynomial_eval_mono timeOverhead (by omega)
 
 end Lax51Proofs.GenericTimeSimulation

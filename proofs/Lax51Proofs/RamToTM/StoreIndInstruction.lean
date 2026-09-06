@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.StoreInstruction
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 abbrev StoreIndInstructionLabel (address : Nat) (R : Type) :=
   OperandEvalLabel (.mem address) (StoreInstructionTailLabel R)

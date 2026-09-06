@@ -3,14 +3,14 @@ import Lax51Proofs.RamToTM.ShiftInstruction
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 /-- The only unbounded data occurring in a fixed RAM instruction which must
 be emitted by the TM interpreter's finite control. -/
 def instrArgument : Instr -> Nat
   | .read a | .store a | .storeInd a => a
   | .write o | .load o | .add o | .sub o | .mul o | .div o
-  | .and o | .or o | .xor o | .shiftl o | .shiftr o => operandArgument o
+  | .and o | .or o | .xor o | .compl o | .shiftl o | .shiftr o => operandArgument o
   | .jump _ | .jzero _ | .jgtz _ | .halt => 0
 
 /-- A uniform finite bound for every literal/address embedded in `p`. -/

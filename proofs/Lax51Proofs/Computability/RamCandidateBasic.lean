@@ -2,7 +2,7 @@ import Lax51Proofs.Computability.SparseRam
 
 namespace Lax51Proofs.Computability
 
-open Lax13.Ram Lax51Proofs.RamToTM
+open Lax51Proofs.Microcode Lax51Proofs.RamToTM
 
 set_option maxHeartbeats 2000000
 

@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.DispatcherControl
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 /-! Canonical stacks at instruction boundaries.  Work stacks are empty there;
 individual verified macros may use them between dispatcher labels. -/

@@ -1,9 +1,10 @@
 import Lax51.TuringRamEquivalence
+import Lax51Proofs.CellToMicrocode
 import Lax51Proofs.Computability.RamCandidateBasic
 
 namespace Lax51Proofs.Computability
 
-open Lax13.Ram Lax51Proofs.RamToTM
+open Lax51Proofs.Microcode Lax51Proofs.RamToTM
 
 set_option maxHeartbeats 2000000
 
@@ -100,7 +101,7 @@ theorem runsTo_output_unique {w : ℕ} {p : Program} {input y z : List ℕ}
 
 theorem ramComputable_to_computable {f : List ℕ → List ℕ}
     (hf : Lax51.TuringRamEquivalence.RamComputable f) : Computable f := by
-  rcases hf with ⟨p, threshold, hthreshold, hram⟩
+  rcases CellToMicrocode.computable hf with ⟨p, threshold, hthreshold, hram⟩
   have hcand := ramCandidate_computable₂ p threshold hthreshold
   have hsearch : Partrec fun x : List ℕ =>
       Nat.rfindOpt (ramCandidate p threshold x) :=

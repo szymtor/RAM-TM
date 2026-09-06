@@ -365,8 +365,10 @@ namespace Lax51Proofs.TMToRam
 
 open Lax13Proofs.Imp Lax13Proofs.Compile
 
+/-- The current compiler reserves two additional temporary cells beyond the
+expression-depth budget. Include them in the fixed address-space overhead. -/
 def layoutBitOverhead (L : Layout) : ℕ :=
-  L.scalars.length + L.temps + L.arrays.length
+  L.scalars.length + L.temps + 2 + L.arrays.length
 
 /-- If values require `E` bits, adding the fixed layout overhead to the word
 length suffices for every scalar, temporary and flattened-array address. -/
@@ -385,9 +387,9 @@ theorem layoutFitsWordsTwoPow (L : Layout) {E w : ℕ} (hE : 0 < E)
   let C := layoutBitOverhead L
   have hCB : L.span (2 ^ E) ≤ C * 2 ^ E := by
     have hone : 1 ≤ 2 ^ E := Nat.one_le_iff_ne_zero.mpr (pow_ne_zero _ (by omega))
-    have hsmall : L.scalars.length + L.temps ≤
-        (L.scalars.length + L.temps) * 2 ^ E := by
-      simpa using Nat.mul_le_mul_left (L.scalars.length + L.temps) hone
+    have hsmall : L.scalars.length + L.temps + 2 ≤
+        (L.scalars.length + L.temps + 2) * 2 ^ E := by
+      simpa using Nat.mul_le_mul_left (L.scalars.length + L.temps + 2) hone
     simp only [Layout.span, C, layoutBitOverhead]
     rw [Nat.add_mul]
     omega

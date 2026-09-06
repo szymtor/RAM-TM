@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.FullDividePost
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 abbrev DivideInstructionTotalLabel (o : Op) (R : Type) :=
   OperandEvalLabel o (FullDividePostLabel R)

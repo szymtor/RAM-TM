@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.FullZipMacro
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 inductive ZipResetLabel
   | reset
@@ -127,26 +127,29 @@ theorem zipInstruction_correct {N : Nat} {R : Type}
   · simpa [zipInstructionProgram, zipInstructionTailProgram] using hchain
 
 inductive BitwiseKind
-  | and | or | xor
+  | and | or | xor | compl
   deriving DecidableEq, Fintype, Inhabited
 
 def BitwiseKind.boolFn : BitwiseKind -> Bool -> Bool -> Bool
   | .and => fun a b => a && b
   | .or => fun a b => a || b
   | .xor => Bool.xor
+  | .compl => fun a _ => !a
 
-def BitwiseKind.natFn : BitwiseKind -> Nat -> Nat -> Nat
+def BitwiseKind.natFn (w : Nat) : BitwiseKind -> Nat -> Nat -> Nat
   | .and => Nat.land
   | .or => Nat.lor
   | .xor => Nat.xor
+  | .compl => fun a _ => 2 ^ w - 1 - a % 2 ^ w
 
 theorem fixedBits_bitwiseKind (kind : BitwiseKind) (w a b : Nat) :
-    fixedBits w (kind.natFn a b) =
+    fixedBits w (kind.natFn w a b) =
       zipBits kind.boolFn (fixedBits w a) (fixedBits w b) := by
   cases kind with
   | and => exact fixedBits_land w a b
   | or => exact fixedBits_lor w a b
   | xor => exact fixedBits_xor w a b
+  | compl => exact fixedBits_complement w a b
 
 def bitwiseInstructionProgram {N : Nat} {R : Type} (kind : BitwiseKind)
     (o : Op) (returnLabel : R)
@@ -172,11 +175,11 @@ theorem bitwiseInstruction_correct {N : Nat} {R : Type}
           (mapLabelCfg (fun l : R => Sum.inr l)
             (cleanReturnCfg returnLabel finalState
               (operandBoundaryBase w
-                (kind.natFn a (operandWordValue w o m) % 2 ^ w)
+                (kind.natFn w a (operandWordValue w o m) % 2 ^ w)
                 m base))))) := by
   simpa [bitwiseInstructionProgram] using
     zipInstruction_correct kind.boolFn o hN w a
-      (kind.natFn a (operandWordValue w o m)) m
+      (kind.natFn w a (operandWordValue w o m)) m
       (fixedBits_bitwiseKind kind w a (operandWordValue w o m))
       returnLabel right hm base state
 

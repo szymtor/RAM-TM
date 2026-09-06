@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.PrependCellMacro
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 /-! Semantic interface used by the concrete operand evaluator.  It separates
 the low word that is placed on a work stack from the raw operand value.  The

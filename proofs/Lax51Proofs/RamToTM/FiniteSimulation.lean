@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.FiniteDispatcher
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 noncomputable section
 
@@ -1195,7 +1195,7 @@ theorem finite_bitwise_to_fetch {p : Program} {N : Nat}
             o.operandArgument_toOp w s.acc s.mem state (coreStacks w s)))) =
       some (finiteInterpreterCfg (.fetch (nextPC p pc)) finalState
         (coreStacks w {s with acc :=
-          (kind.natFn s.acc (operandWordValue w o.toOp s.mem) % 2 ^ w)})) := by
+          (kind.natFn w s.acc (operandWordValue w o.toOp s.mem) % 2 ^ w)})) := by
   let haltRight : BoundedPC p -> TM2.Stmt
       (fun _ : CoreStack => SparseSymbol) (BoundedPC p)
       (FullInterpreterState N) := fun _ => .halt
@@ -1210,7 +1210,7 @@ theorem finite_bitwise_to_fetch {p : Program} {N : Nat}
         (mapLabelCfg (fun l : BoundedPC p => Sum.inr l)
           (cleanReturnCfg (nextPC p pc) finalState
             (operandBoundaryBase w
-              (kind.natFn s.acc (operandWordValue w o.toOp s.mem) % 2 ^ w)
+              (kind.natFn w s.acc (operandWordValue w o.toOp s.mem) % 2 ^ w)
               s.mem (coreStacks w s)))))
   have hfinal : finalCfg.l.isSome := by cases o <;> rfl
   have hhalt : bitwiseInstructionProgram kind o.toOp (nextPC p pc) haltRight
@@ -2285,6 +2285,7 @@ def bitwiseInstr : BitwiseKind -> Op -> Instr
   | .and => .and
   | .or => .or
   | .xor => .xor
+  | .compl => .compl
 
 set_option maxHeartbeats 1500000 in
 theorem finite_bitwise_instruction {p : Program} {N pc w : Nat}
@@ -2300,7 +2301,7 @@ theorem finite_bitwise_instruction {p : Program} {N pc w : Nat}
           (coreStacks w s))) =
       some (finiteInterpreterCfg (.fetch (nextPC p (boundPC p pc))) finalState
         (coreStacks w {s with acc :=
-          (kind.natFn s.acc (sparseValue w o s.mem) % 2 ^ w)})) := by
+          (kind.natFn w s.acc (sparseValue w o s.mem) % 2 ^ w)})) := by
   have hargument : instrArgument (bitwiseInstr kind o) = operandArgument o := by
     cases kind <;> rfl
   let harg : operandArgument o <= N := by
@@ -2331,14 +2332,14 @@ theorem finite_bitwise_instruction {p : Program} {N pc w : Nat}
     (by cases kind <;> simp [bitwiseInstr]) state (coreStacks w s) localCfg
     (finiteInterpreterCfg (.fetch (nextPC p (boundPC p pc))) finalState
       (coreStacks w {s with acc :=
-        (kind.natFn s.acc (operandWordValue w bo.toOp s.mem) % 2 ^ w)}))
+        (kind.natFn w s.acc (operandWordValue w bo.toOp s.mem) % 2 ^ w)}))
     hentry hlocal
   refine ⟨2 + localSteps, by omega, finalState, hdispatch, ?_⟩
   have hword : operandWordValue w o s.mem = sparseValue w o s.mem % 2 ^ w := rfl
-  have hnat : kind.natFn s.acc (operandWordValue w o s.mem) % 2 ^ w =
-      kind.natFn s.acc (sparseValue w o s.mem) % 2 ^ w := by
-    have hbits : fixedBits w (kind.natFn s.acc (operandWordValue w o s.mem)) =
-        fixedBits w (kind.natFn s.acc (sparseValue w o s.mem)) := by
+  have hnat : kind.natFn w s.acc (operandWordValue w o s.mem) % 2 ^ w =
+      kind.natFn w s.acc (sparseValue w o s.mem) % 2 ^ w := by
+    have hbits : fixedBits w (kind.natFn w s.acc (operandWordValue w o s.mem)) =
+        fixedBits w (kind.natFn w s.acc (sparseValue w o s.mem)) := by
       rw [fixedBits_bitwiseKind, fixedBits_bitwiseKind, hword,
         fixedBits_mod_word]
     simpa only [bitsValue_fixedBits] using congrArg bitsValue hbits
@@ -2573,6 +2574,7 @@ theorem finite_sparseHalt_to_stopped {p : Program} {N w : Nat}
       | and o => simp [sparseEffect] at hstop
       | or o => simp [sparseEffect] at hstop
       | xor o => simp [sparseEffect] at hstop
+      | compl o => simp [sparseEffect] at hstop
       | shiftl o => simp [sparseEffect] at hstop
       | shiftr o => simp [sparseEffect] at hstop
       | jump target => simp [sparseEffect] at hstop
@@ -2912,6 +2914,14 @@ theorem finite_data_effect {p : Program} {N w : Nat}
       refine ⟨steps, hs.trans (zipInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
       simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using hrun
+  | compl o =>
+      simp [sparseEffect] at heffect
+      subst s'
+      rcases finite_bitwise_instruction hbound .compl o hfetch s hm state with
+        ⟨steps, hs, finalState, hdispatch, hrun⟩
+      refine ⟨steps, hs.trans (zipInstructionBound_le_finiteDataStepBound _ _),
+        finalState, hdispatch, ?_⟩
+      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using hrun
   | shiftl o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2996,6 +3006,7 @@ theorem finite_sparseStep_correct {p : Program} {N w : Nat}
         | and _ => simp [isDataInstr] at hdata
         | or _ => simp [isDataInstr] at hdata
         | xor _ => simp [isDataInstr] at hdata
+        | compl _ => simp [isDataInstr] at hdata
         | shiftl _ => simp [isDataInstr] at hdata
         | shiftr _ => simp [isDataInstr] at hdata
 

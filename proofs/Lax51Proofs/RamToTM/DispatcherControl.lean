@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.SparseBitMacros
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 /-! Finite control used by the RAM interpreter.  For a fixed program all
 in-range program counters are finite; every out-of-range counter has the same
@@ -61,7 +61,7 @@ theorem nextPC_boundPC_of_lt {p : Program} {pc : ℕ} (h : pc < p.length) :
 control; operands and jump targets are recovered from the fixed program table. -/
 inductive InstrClass
   | read | write | load | store | storeInd
-  | add | sub | mul | div | and | or | xor | shiftl | shiftr
+  | add | sub | mul | div | and | or | xor | compl | shiftl | shiftr
   | jump | jzero | jgtz | halt
   deriving DecidableEq, Fintype, Inhabited
 
@@ -78,6 +78,7 @@ def instrClass : Instr → InstrClass
   | .and _ => .and
   | .or _ => .or
   | .xor _ => .xor
+  | .compl _ => .compl
   | .shiftl _ => .shiftl
   | .shiftr _ => .shiftr
   | .jump _ => .jump
@@ -185,7 +186,7 @@ theorem dispatchSuccessor_correct {p : Program} {w : ℕ} {i : Instr}
       simp [sparseEffect] at heffect
       subst s'
       simp [dispatchSuccessor, stateDispatchLabel, nextPC_boundPC_of_lt hpc]
-  | xor operand =>
+  | xor operand | compl operand =>
       simp [sparseEffect] at heffect
       subst s'
       simp [dispatchSuccessor, stateDispatchLabel, nextPC_boundPC_of_lt hpc]

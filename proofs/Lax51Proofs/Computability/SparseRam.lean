@@ -2,7 +2,7 @@ import Lax51Proofs.Computability.SparseRamBasic
 
 namespace Lax51Proofs.Computability
 
-open Lax13.Ram Lax51Proofs.RamToTM
+open Lax51Proofs.Microcode Lax51Proofs.RamToTM
 
 set_option maxHeartbeats 2000000
 
@@ -156,6 +156,13 @@ theorem sparseEffect_primrec (i : Instr) :
       exact effect_with_acc_primrec
         (normalized_binary_primrec o (fun a b => a * 2 ^ b)
           (Primrec.nat_mul.comp₂ Primrec₂.left hpow))
+  | compl _ =>
+      apply effect_with_acc_primrec
+      exact Primrec.nat_mod.comp
+        (Primrec.nat_sub.comp
+          (Primrec.nat_sub.comp effect_pow_primrec (Primrec.const 1))
+          (Primrec.nat_mod.comp effect_acc_primrec effect_pow_primrec))
+        effect_pow_primrec
   | shiftr o =>
       have hpow : Primrec₂ fun (_ : ℕ) b => 2 ^ b :=
         nat_pow_primrec₂.comp₂ (Primrec₂.const 2) Primrec₂.right

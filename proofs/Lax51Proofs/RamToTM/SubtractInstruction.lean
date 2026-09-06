@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.FullSubtractMacro
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 inductive SubtractResetLabel
   | reset

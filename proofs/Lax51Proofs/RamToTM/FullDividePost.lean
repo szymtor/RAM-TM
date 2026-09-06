@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.ConditionalAccumulatorZeroPhase
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 abbrev FullDividePostLabel (R : Type) :=
   FullDivideLabel (ConditionalZeroPhaseLabel R)

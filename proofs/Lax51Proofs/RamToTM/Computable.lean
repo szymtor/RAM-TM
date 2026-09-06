@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.Polytime
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Polynomial Lax13.Ram
+open Turing TM2 Polynomial Lax51Proofs.Microcode
 open Lax51.BinaryWordEncoding Lax51.RamPolytime
 
 noncomputable section

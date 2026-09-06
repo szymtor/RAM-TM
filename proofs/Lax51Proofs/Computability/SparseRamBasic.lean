@@ -2,7 +2,7 @@ import Lax51Proofs.Computability.Bitwise
 
 namespace Lax51Proofs.Computability
 
-open Lax13.Ram Lax51Proofs.RamToTM
+open Lax51Proofs.Microcode Lax51Proofs.RamToTM
 
 instance sparseMemoryPrimcodable : Primcodable SparseMemory :=
   show Primcodable (List (ℕ × ℕ)) from inferInstance

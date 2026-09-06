@@ -1,4 +1,6 @@
 import Lax51Proofs.RamToTM.SparseMemory
+import Mathlib.Algebra.Polynomial.Degree.Support
+import Mathlib.Tactic.Linarith
 
 namespace Lax51Proofs.RamToTM
 

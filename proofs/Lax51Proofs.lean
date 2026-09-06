@@ -1,4 +1,6 @@
 import Lax51Proofs.Encoding
+import Lax51Proofs.Microcode
+import Lax51Proofs.CellToMicrocode
 import Lax51Proofs.TMToRam.Program
 import Lax51Proofs.TMToRam.ReachableSymbols
 import Lax51Proofs.TMToRam.ConfigEncoding

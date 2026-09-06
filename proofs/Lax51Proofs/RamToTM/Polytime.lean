@@ -1,10 +1,11 @@
 import Lax51Proofs.RamToTM.CombinedInterpreter
+import Lax51Proofs.CellToMicrocode
 import Lax51.RamPolytime
 import Lax51.TuringPolytime
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Polynomial Lax13.Ram
+open Turing TM2 Polynomial Lax51Proofs.Microcode
 open Lax51.BinaryWordEncoding Lax51.RamPolytime Lax51.TuringPolytime
 
 noncomputable section
@@ -264,7 +265,7 @@ theorem ramSimulation_haltList (p : Program) (wordBound : Polynomial Nat)
 RAM is simulated by one finite multi-stack Turing machine. -/
 theorem ramPolytime_to_turingPolytime {f : List Nat → List Nat}
     (hf : RamPolytime f) : TuringPolytime f := by
-  rcases hf with ⟨p, wordBound, timeBound, hram⟩
+  rcases CellToMicrocode.polytime hf with ⟨p, wordBound, timeBound, hram⟩
   refine ⟨{
     tm := ramSimulationTM p wordBound
     inputAlphabet := Equiv.refl Symbol

@@ -2,7 +2,7 @@ import Lax51Proofs.RamToTM.WordTransferMacro
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 def SparseMemory.Normalized (w : ℕ) : SparseMemory → Prop
   | [] => True

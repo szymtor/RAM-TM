@@ -10,7 +10,7 @@ import Lax51Proofs.RamToTM.DivideInstructionTotal
 
 namespace Lax51Proofs.RamToTM
 
-open Turing TM2 Lax13.Ram
+open Turing TM2 Lax51Proofs.Microcode
 
 noncomputable section
 
@@ -27,7 +27,7 @@ def instructionLabelType (p : Program) (pc : BoundedPC p) : Type :=
   | some (.sub o) => SubtractInstructionLabel o (BoundedPC p)
   | some (.mul o) => MulInstructionLabel o (BoundedPC p)
   | some (.div o) => DivideInstructionTotalLabel o (BoundedPC p)
-  | some (.and o) | some (.or o) | some (.xor o) =>
+  | some (.and o) | some (.or o) | some (.xor o) | some (.compl o) =>
       ZipInstructionLabel o (BoundedPC p)
   | some (.shiftl o) | some (.shiftr o) =>
       ShiftInstructionLabel o (BoundedPC p)
@@ -90,6 +90,7 @@ def instructionEntry (p : Program) (pc : BoundedPC p) :
   next h => exact some (operandEvalStartLabel _)
   next h => exact some (operandEvalStartLabel _)
   next h => exact some (operandEvalStartLabel _)
+  next h => exact some (operandEvalStartLabel _)
   all_goals exact none
 
 def localLabelEquiv (p : Program) (pc : BoundedPC p) :
@@ -139,6 +140,7 @@ def localInstructionProgram (p : Program) (N : Nat) (pc : BoundedPC p) :
   next o h => exact bitwiseInstructionProgram .and o (nextPC p pc) (fun _ => .halt)
   next o h => exact bitwiseInstructionProgram .or o (nextPC p pc) (fun _ => .halt)
   next o h => exact bitwiseInstructionProgram .xor o (nextPC p pc) (fun _ => .halt)
+  next o h => exact bitwiseInstructionProgram .compl o (nextPC p pc) (fun _ => .halt)
   next o h => exact shiftInstructionProgram o false (nextPC p pc) (fun _ => .halt)
   next o h => exact shiftInstructionProgram o true (nextPC p pc) (fun _ => .halt)
   all_goals exact fun _ => .halt
@@ -186,7 +188,7 @@ def prepareInstructionEntry (p : Program) (N : Nat)
             (BoundedLiteralControl.initial
               (by simpa [instrArgument] using harg))
       | write o | load o | add o | sub o | mul o | div o
-      | and o | or o | xor o | shiftl o | shiftr o =>
+      | and o | or o | xor o | compl o | shiftl o | shiftr o =>
           exact prepareOperandEntry pc
             (BoundedLiteralControl.initial
               (by simpa [instrArgument] using harg))

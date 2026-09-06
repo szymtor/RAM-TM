@@ -1,8 +1,13 @@
-import Lax51Proofs.TMToRam.Polytime
+import Lax51.RamPolytime
+import Lax51.TuringPolytime
+import Lax51Proofs.Encoding
+import Mathlib.Tactic.GCongr
+import Mathlib.Tactic.Ring
+import Lax51Proofs.Microcode
 
 namespace Lax51Proofs.RamToTM
 
-open Lax13.Ram
+open Lax51Proofs.Microcode
 
 /-- A finite association list representing the nonzero/touched fragment of
 RAM memory. Missing cells read as zero. -/
@@ -145,6 +150,8 @@ def sparseEffect (w : ℕ) : Instr → SparseState → Option SparseState
       some { s with pc := s.pc + 1, acc := Nat.lor s.acc (sparseValue w o s.mem) % 2 ^ w }
   | .xor o, s =>
       some { s with pc := s.pc + 1, acc := Nat.xor s.acc (sparseValue w o s.mem) % 2 ^ w }
+  | .compl _, s =>
+      some { s with pc := s.pc + 1, acc := (2 ^ w - 1 - s.acc % 2 ^ w) % 2 ^ w }
   | .shiftl o, s =>
       some { s with pc := s.pc + 1, acc := s.acc * 2 ^ sparseValue w o s.mem % 2 ^ w }
   | .shiftr o, s =>
