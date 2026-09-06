@@ -9,3 +9,6 @@ authors:
   - name: Codex 5.6
 bibEntries:
   - "@book{AhoHopcroftUllman1974,\n  author = {Aho, Alfred V. and Hopcroft, John E. and Ullman, Jeffrey D.},\n  title = {The Design and Analysis of Computer Algorithms},\n  publisher = {Addison-Wesley},\n  year = {1974}\n}"
+issue:
+  repositoryId: 1320232165
+  number: 51
