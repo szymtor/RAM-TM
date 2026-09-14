@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.SparseRunBounds
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -114,7 +117,6 @@ def lookupScanCfg (label : LookupScanLabel) (equal : Bool)
     (lookupScanStacks [.memoryEnd] address value cellBackup query addressBackup
       queryBackup processed trash)) = _
   simp [LookupCellControl.clearHeld, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 @[simp] theorem lookupScan_step_nonempty (equal : Bool) (b : Bool)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -134,7 +136,6 @@ def lookupScanCfg (label : LookupScanLabel) (equal : Bool)
     (lookupScanStacks (.bit b :: source) address value cellBackup query addressBackup
       queryBackup processed trash)) = _
   simp [LookupCellControl.clearHeld, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 theorem lookupScan_step_cell_start (equal : Bool) (a : SparseSymbol)
     (ha : a ≠ .memoryEnd)
@@ -154,7 +155,6 @@ theorem lookupScan_step_cell_start (equal : Bool) (a : SparseSymbol)
     (lookupScanStacks (a :: source) address value cellBackup query addressBackup
       queryBackup processed trash)) = _
   simp [ha, LookupCellControl.clearHeld, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 theorem lookupScan_step_encoded_cell (equal : Bool) (w a v : ℕ)
     (suffix address value cellBackup query addressBackup queryBackup processed trash :
@@ -307,9 +307,6 @@ theorem lookupScan_step_encoded_cell (equal : Bool) (w a v : ℕ)
     (lookupScanStacks source [] value cellBackup query addressBackup queryBackup
       processed trash)) = _
   simp [lookupCellCompareIteration, lookupScanCfg, lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 theorem lookupScan_address_iterate (equal : Bool) (xs : List Bool)
     (suffix address value cellBackup query addressBackup queryBackup processed trash :
@@ -563,9 +560,6 @@ theorem lookupScan_fixed_reaches_decide (w a v query : ℕ)
       trash)) = _
   simp [lookupScanMoveIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_preserveCell_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -621,9 +615,6 @@ theorem lookupScan_preserveCell_reaches_moveCell (equal : Bool)
       processed [])) = _
   simp [lookupScanMoveIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_moveCell_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -688,9 +679,6 @@ theorem lookupScan_moveCell_reaches_afterMove (equal : Bool)
       processed trash)) = _
   simp [lookupScanDiscardIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_discardValue_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -754,9 +742,6 @@ theorem lookupScan_discardValue_reaches_preserveCell (equal : Bool)
       trash)) = _
   simp [lookupScanMoveIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_restoreQuery_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -812,9 +797,6 @@ theorem lookupScan_restoreQuery_reaches_discardAddress (equal : Bool)
       trash)) = _
   simp [lookupScanDiscardIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_discardAddress_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -861,7 +843,6 @@ theorem lookupScan_discardAddress_reaches_afterCleanup (equal : Bool)
     some (lookupScanCfg .preserveCell true source address value cellBackup query
       addressBackup queryBackup processed trash) := by
   simp [lookupScanMachine, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 @[simp] theorem lookupScan_step_afterCleanup_false
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -871,7 +852,6 @@ theorem lookupScan_discardAddress_reaches_afterCleanup (equal : Bool)
     some (lookupScanCfg .discardValue false source address value cellBackup query
       addressBackup queryBackup processed trash) := by
   simp [lookupScanMachine, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 @[simp] theorem lookupScan_step_afterMove_true
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -881,7 +861,6 @@ theorem lookupScan_discardAddress_reaches_afterCleanup (equal : Bool)
     some (lookupScanCfg .restoreFound true source address value cellBackup query
       addressBackup queryBackup processed trash) := by
   simp [lookupScanMachine, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 @[simp] theorem lookupScan_step_afterMove_false
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -891,7 +870,6 @@ theorem lookupScan_discardAddress_reaches_afterCleanup (equal : Bool)
     some (lookupScanCfg .scan false source address value cellBackup query
       addressBackup queryBackup processed trash) := by
   simp [lookupScanMachine, lookupScanCfg, lookupScanStacks]
-  congr 2
 
 @[simp] theorem lookupScan_step_restoreFound_nil (equal : Bool)
     (source address value cellBackup query addressBackup queryBackup trash :
@@ -908,9 +886,6 @@ theorem lookupScan_discardAddress_reaches_afterCleanup (equal : Bool)
       trash)) = _
   simp [lookupScanMoveIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_restoreFound_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :
@@ -966,9 +941,6 @@ theorem lookupScan_restoreFound_reaches_found (equal : Bool)
       trash)) = _
   simp [lookupScanMoveIteration, LookupCellControl.clearHeld, lookupScanCfg,
     lookupScanStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem lookupScan_step_restoreMissing_cons (equal : Bool) (a : SparseSymbol)
     (source address value cellBackup query addressBackup queryBackup processed trash :

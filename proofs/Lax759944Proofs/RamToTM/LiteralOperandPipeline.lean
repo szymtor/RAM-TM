@@ -86,7 +86,7 @@ theorem literalOperand_correct {N : ℕ} {R : Type}
   simp only [List.length_map, fixedBits_length, List.append_nil] at h
   rw [literalOperand_return_bridge n hn w accumulator m returnLabel state base]
     at h
-  simpa [literalOperandProgram, literalOperandStartCfg, operandWordValue] using h
+  simpa [literalOperandProgram, literalOperandStartCfg, operandWordValue] using! h
 
 theorem transport_iterate_literal_right {N : Nat} {R : Type}
     (returnLabel : R)

@@ -70,7 +70,7 @@ theorem sparseMulLocal_fixed_correct (w a b : ℕ) (hw : 0 < w)
     cases l <;> rfl
   rw [hp]
   simpa [sparseMulLocalOuterCfg, sparseMulLocalDoneCfg, sparseMulOuterCfg,
-    sparseMulDoneCfg, mulOuterCfg, mulDoneCfg, mapAlphabetCfg] using hrun
+    sparseMulDoneCfg, mulOuterCfg, mulDoneCfg, mapAlphabetCfg] using! hrun
 
 theorem sparseMulLocal_fixed_correct_with_length (w a b : ℕ) (hw : 0 < w)
     (hb : b < 2 ^ w) :
@@ -88,7 +88,7 @@ theorem sparseMulLocal_fixed_correct_with_length (w a b : ℕ) (hw : 0 < w)
     cases l <;> rfl
   rw [hp]
   simpa [sparseMulLocalOuterCfg, sparseMulLocalDoneCfg, sparseMulOuterCfg,
-    sparseMulDoneCfg, mulOuterCfg, mulDoneCfg, mapAlphabetCfg] using hrun
+    sparseMulDoneCfg, mulOuterCfg, mulDoneCfg, mapAlphabetCfg] using! hrun
 
 theorem sparseMul_core_fixed_correct {Λx τ : Type}
     (w a b : ℕ) (hw : 0 < w) (hb : b < 2 ^ w)

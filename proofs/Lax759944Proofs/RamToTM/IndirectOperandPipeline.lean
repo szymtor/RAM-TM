@@ -179,7 +179,7 @@ theorem transport_iterate_indirect_right {N : Nat} {R : Type}
   have hall := transport_iterate_direct_right
     (Sum.inl SymbolMoveLabel.loop : IndirectTransferLabel R)
     (indirectTransferProgram returnLabel right) htransfer
-  simpa [embedIndirectReturnCfg, embedIndirectTransferReturnCfg] using hall
+  simpa [embedIndirectReturnCfg, embedIndirectTransferReturnCfg] using! hall
 
 private theorem chain_iterations {X : Type} (step : X → X)
     {a b c : X} {m n : ℕ}

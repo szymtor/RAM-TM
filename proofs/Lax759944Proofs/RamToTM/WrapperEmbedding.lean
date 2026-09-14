@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.FiniteSimulation
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -104,13 +107,13 @@ theorem stepAux_liftCoreStmt {N : Nat} {L X : Type}
   induction stmt generalizing core inner with
   | push k f q ih =>
       simp only [liftCoreStmt, TM2.stepAux, WrapperState.coreLens]
-      simpa only [update_wrapperCoreStacks] using ih _ _
+      simpa only [update_wrapperCoreStacks] using! ih _ _
   | peek k f q ih =>
       simp only [liftCoreStmt, TM2.stepAux, WrapperState.coreLens]
-      simpa only [wrapperCoreStacks] using ih _ _
+      simpa only [wrapperCoreStacks] using! ih _ _
   | pop k f q ih =>
       simp only [liftCoreStmt, TM2.stepAux, WrapperState.coreLens]
-      simpa only [wrapperCoreStacks, update_wrapperCoreStacks] using ih _ _
+      simpa only [wrapperCoreStacks, update_wrapperCoreStacks] using! ih _ _
   | load f q ih =>
       simp only [liftCoreStmt, TM2.stepAux, WrapperState.coreLens]
       exact ih _ _

@@ -56,7 +56,7 @@ theorem sparseCompareLocal_fixed_correct (w a b : Nat)
   rw [hp]
   simpa [sparseCompareLocalCfg, sparseCompareLocalDoneCfg,
     sparseCompareCfg, sparseCompareDoneCfg, compareCfg, compareDoneCfg,
-    mapAlphabetCfg] using sparseCompare_fixed_correct w a b ha hb
+    mapAlphabetCfg] using! sparseCompare_fixed_correct w a b ha hb
 
 abbrev FullCompareLabel (R : Type) := Sum CompareLabel R
 

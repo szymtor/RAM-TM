@@ -252,7 +252,7 @@ theorem encodePartrecInputBody_correct (consCode zeroCode oneCode : ℕ)
     have hpreserve := hbits.inp_eq (by
       simp [encodeBitsLoop, encodeBitsBody, appendScratch, seqs, Com.reads])
     rw [hpreserve]
-  have hinp₃ : σ₃.inp = rest := by simpa [σ₃] using hinp₂
+  have hinp₃ : σ₃.inp = rest := by simpa [σ₃] using! hinp₂
   let σ₄ := σ₃.setVar inputCountVar (σ.vars inputCountVar - 1)
   have hdecrement : BigStep
       (.assign inputCountVar (.sub (.var inputCountVar) (.lit 1))) σ₃ σ₄ 4 := by
@@ -432,7 +432,7 @@ theorem encodeNativePartrecInputToScratch_correct
       (σ₅.arrs scratchName).length := by
     rw [BigStep.arr_length_eq happend scratchName,
       BigStep.arr_length_eq hbits scratchName]
-    simpa [written] using hspace
+    simpa [written] using! hspace
   obtain ⟨σ', loopCost, hloop, hloopCost, hfinalInp, _hfinalCount,
       hfinalLength, hfinalPrefix⟩ :=
     encodePartrecInputLoop_correct consCode zeroCode oneCode σ₅ x written
@@ -524,7 +524,7 @@ theorem compilePartrecInputCodec_correct
         reverseScratchBody, seqs, Com.reads]
   · simp [σ₄, σ₃, Env.setVar, stateVar, labelVar]
   · simp [σ₄, Env.setVar]
-  · simpa [σ₄, σ₃, codes] using hreverseTop
+  · simpa [σ₄, σ₃, codes] using! hreverseTop
   · simpa [σ₄, σ₃, codes] using hreversePrefix
 
 open PartrecFiniteTM2 in
@@ -600,7 +600,7 @@ theorem compilePartrecInputCodec_initialRep (c : ToPartrec.Code)
             (⟨tm.k₀, a⟩ : Σ k, tm.Γ k) ∈ FinTM2.availableSymbols tm := by
           intro a ha
           exact hc tm.k₀ a (by simpa [Turing.initList, input] using ha)
-        simpa [tm, input, codes] using (codeStack_trList c
+        simpa [tm, input, codes] using! (codeStack_trList c
           (x.length :: x) havail)
       rw [hcodeStack]
       exact ⟨htop, harrLength, hprefix⟩
@@ -786,7 +786,7 @@ theorem compilePartrecOutputCodec_haltList (c : ToPartrec.Code)
   rw [FinTM2.encodeNumericState_stack] at hstackRep
   have hstackRep' : StackRep σ stack (capacity stack)
       (FinTM2.codeStack tm tm.k₁ (trList y) havail) := by
-    simpa [Turing.haltList] using hstackRep
+    simpa [Turing.haltList] using! hstackRep
   have htop : σ.vars (topName stack) = codes.length := by
     rw [hstackRep'.1, hcodes]
   have hstack : (σ.arrs (stackName stack)).take codes.length =
@@ -903,7 +903,7 @@ theorem compilePartrecNativeMachine_safeRun (c : ToPartrec.Code)
             maxCost (FinTM2.compileDispatcher (machine c) 0).com) *
               hrun.steps +
           (1 + Cond.size (.lt (.lit 0) (.var labelVar))) := by
-      simpa [tm] using hcoreCost
+      simpa [tm] using! hcoreCost
     omega
 
 end Lax759944Proofs.Computability.PartrecNativeCodec

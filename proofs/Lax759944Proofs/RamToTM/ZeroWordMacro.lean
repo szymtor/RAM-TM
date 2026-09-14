@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.LookupScanCorrect
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -80,9 +83,6 @@ theorem zeroWord_first_step_independent (state : ZeroWordControl)
     zeroWordMachine.step (zeroWordCfg .fill [] backup result) =
       some (zeroWordCfg .restore [] backup result) := by
   simp [zeroWordMachine, zeroWordCfg, zeroWordStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem zeroWord_step_fill_cons (a : SparseSymbol)
     (query backup result : List SparseSymbol) :
@@ -97,9 +97,6 @@ theorem zeroWord_first_step_independent (state : ZeroWordControl)
     zeroWordMachine.step (zeroWordCfg .restore query [] result) =
       some (zeroWordCfg .done query [] result) := by
   simp [zeroWordMachine, zeroWordCfg, zeroWordStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem zeroWord_step_restore_cons (a : SparseSymbol)
     (query backup result : List SparseSymbol) :
@@ -225,7 +222,7 @@ theorem zeroWordTyped_correct (query result : List SparseSymbol) :
       (some (zeroWordTypedCfg .fill query [] result)) =
     some (zeroWordTypedCfg .done query []
       (List.replicate query.length (.bit false) ++ result)) := by
-  simpa [zeroWordProgram, zeroWordTypedCfg, zeroWordCfg] using
+  simpa [zeroWordProgram, zeroWordTypedCfg, zeroWordCfg] using!
     zeroWord_correct query result
 
 theorem zeroWordTyped_fixed_correct (w query : ℕ) :
@@ -237,7 +234,7 @@ theorem zeroWordTyped_fixed_correct (w query : ℕ) :
     some (zeroWordTypedCfg .done
       ((fixedBits w query).reverse.map SparseSymbol.bit) []
       ((fixedBits w 0).reverse.map SparseSymbol.bit)) := by
-  simpa [zeroWordProgram, zeroWordTypedCfg, zeroWordCfg] using
+  simpa [zeroWordProgram, zeroWordTypedCfg, zeroWordCfg] using!
     zeroWord_fixed_correct w query
 
 end Lax759944Proofs.RamToTM

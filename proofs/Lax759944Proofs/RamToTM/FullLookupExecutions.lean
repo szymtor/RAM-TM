@@ -40,7 +40,7 @@ theorem fullLookup_found {N : ℕ} {R : Type}
     FullInterpreterState.lookupLens lookupScanProgram .found (by rfl)
     returnLabel right
   · simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using hrun
+      lookupScanMachine] using! hrun
   · rfl
 
 theorem fullLookup_missing {N : ℕ} {R : Type}
@@ -83,7 +83,7 @@ theorem fullLookup_missing {N : ℕ} {R : Type}
         (processed.reverse ++ encodeSparseMemory w m ++ [.memoryEnd]) [] [] []
         ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] [] []) := by
     simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using
+      lookupScanMachine] using!
       lookupScan_all_missing w query hq m hm hmissing true processed
   convert transport_lensHaltingMacro_and_return lookupCoreRenaming
     FullInterpreterState.lookupLens lookupScanProgram .missing (by rfl)

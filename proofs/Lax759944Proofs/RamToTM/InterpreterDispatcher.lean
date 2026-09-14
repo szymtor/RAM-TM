@@ -8,6 +8,9 @@ import Lax759944Proofs.RamToTM.StoreIndInstruction
 import Lax759944Proofs.RamToTM.SubtractInstruction
 import Lax759944Proofs.RamToTM.DivideInstructionTotal
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode

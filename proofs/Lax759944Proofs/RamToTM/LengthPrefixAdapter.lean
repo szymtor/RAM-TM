@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.UnaryZeroWordMacro
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -332,7 +334,7 @@ theorem lengthPrefix_complete {N w count : Nat} (state : WrapperState N)
   rw [← hmid] at hcount
   have h := chain_iterations _ hzero hcount
   convert h using 1
-  case h.e'_2 =>
+  case e'_2 =>
     congr 2
     simp [lengthPrefixCfg, mapLabelCfg, liftCoreCfg, lensRenamedCfg,
       unaryZeroCfg, unaryZeroStacks, renamedStacks,
@@ -347,7 +349,7 @@ theorem lengthPrefix_complete {N w count : Nat} (state : WrapperState N)
       | input | output => rfl
       | core k => cases k <;> simp [renamedStacks, unaryZeroStacks,
           lengthPrefixInitialStacks, wrapperCoreStacks, Function.update] <;> rfl
-  case h.e'_3 =>
+  case e'_3 =>
     congr 2
     simp [lengthPrefixCfg, lengthPrefixFinalState, lengthPrefixFinalStacks,
       mapLabelCfg, liftCoreCfg, lensReturnCfg, countIncrementCfg,

@@ -323,6 +323,6 @@ theorem lookupMissingPipeline_correct {N : ℕ} {R : Type}
       (w + 1 + 1 + (2 * w + 2 + 1)) =
       m.length * (12 * w + 22) + 3 * w + 8 := by omega
   rw [htime] at hchain
-  simpa [lookupMissingPipelineProgram, lookupState] using hchain
+  simpa [lookupMissingPipelineProgram, lookupState] using! hchain
 
 end Lax759944Proofs.RamToTM

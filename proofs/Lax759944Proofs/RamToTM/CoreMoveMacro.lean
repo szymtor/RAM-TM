@@ -80,7 +80,7 @@ theorem symbolMoveLocal_correct (source target : List SparseSymbol) :
     funext l
     rfl
   rw [hp]
-  simpa [symbolMoveLocalCfg, symbolMoveCfg, symbolMoveDoneCfg] using
+  simpa [symbolMoveLocalCfg, symbolMoveCfg, symbolMoveDoneCfg] using!
     symbolMove_reaches_done source target
 
 theorem symbolMove_core_correct {Λx τ : Type}

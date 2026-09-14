@@ -5,6 +5,9 @@ import Mathlib.Tactic.GCongr
 import Mathlib.Tactic.Ring
 import Lax759944Proofs.Microcode
 
+-- Preserve Lean 4.30 definition unfolding during elaboration.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Lax759944Proofs.Microcode

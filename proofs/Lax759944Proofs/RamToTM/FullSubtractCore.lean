@@ -21,7 +21,7 @@ theorem sparseSubLocal_fixed_run (w a b : Nat)
     sparseBitEncode sparseBitDecode sparseBitDecode_encode subMachine.m hrun
   simpa [sparseSubLocalCfg, sparseSubLocalDoneCfg, sparseSubCfg,
     sparseSubDoneCfg, subCfg, subDoneCfg, subPartialDoneCfg,
-    mapAlphabetCfg] using hsparse
+    mapAlphabetCfg] using! hsparse
 
 abbrev FullSubtractCoreLabel (R : Type) := Sum AddLabel R
 

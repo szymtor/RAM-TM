@@ -39,7 +39,7 @@ theorem partrecPhysicalRunningTime_computable (c : ToPartrec.Code)
     {f : List ℕ → List ℕ}
     (h : ∀ x, c.eval (x.length :: x) = pure (f x)) :
     Computable (partrecPhysicalRunningTime c h) := by
-  simpa [partrecPhysicalRunningTime] using
+  simpa [partrecPhysicalRunningTime] using!
     Computable.find (partrecPhysicalHaltsAt_computablePred c)
       (partrecPhysicalHaltsAt_exists h)
 

@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.SubtractMacro
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -54,9 +56,6 @@ def shiftCfg (l : ShiftLabel) (source temp result : List Bool) : shiftMachine.Cf
     (moveIteration ShiftStack.source ShiftStack.temp ShiftLabel.first ShiftLabel.discard)
     ⟨none⟩ (shiftStacks [] temp result)) = _
   simp [moveIteration, shiftCfg, shiftStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem shift_step_discard (source result : List Bool) :
     shiftMachine.step (shiftCfg .discard source [] result) =
@@ -66,9 +65,6 @@ def shiftCfg (l : ShiftLabel) (source temp result : List Bool) : shiftMachine.Cf
       (.goto fun _ => ShiftLabel.second))
     ⟨none⟩ (shiftStacks source [] result)) = _
   simp [shiftCfg, shiftStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem shift_step_discard_cons (source result : List Bool) (a : Bool)
     (temp : List Bool) :
@@ -109,9 +105,6 @@ def shiftCfg (l : ShiftLabel) (source temp result : List Bool) : shiftMachine.Cf
     (moveIteration ShiftStack.temp ShiftStack.result ShiftLabel.second ShiftLabel.prepend)
     ⟨none⟩ (shiftStacks source [] result)) = _
   simp [moveIteration, shiftCfg, shiftStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem shift_step_prepend (source temp result : List Bool) :
     shiftMachine.step (shiftCfg .prepend source temp result) =
@@ -163,19 +156,19 @@ theorem shiftMachine_correct_nonempty (a : Bool) (as : List Bool) :
   simp only [List.append_nil] at hfirst hsecond
   have h₁ : (stepO^[1]) (some (shiftCfg .first [] (a :: as).reverse [])) =
       some (shiftCfg .discard [] (a :: as).reverse []) := by
-    simpa [stepO] using shift_step_first_nil (a :: as).reverse ([] : List Bool)
+    simpa [stepO] using! shift_step_first_nil (a :: as).reverse ([] : List Bool)
   have h₂ : (stepO^[1]) (some (shiftCfg .discard [] (a :: as).reverse [])) =
       some (shiftCfg .second [] (a :: as).reverse.tail []) := by
-    simpa [stepO] using shift_step_discard_any ([] : List Bool) (a :: as).reverse []
+    simpa [stepO] using! shift_step_discard_any ([] : List Bool) (a :: as).reverse []
   have h₃ : (stepO^[1])
       (some (shiftCfg .second [] [] (a :: as).reverse.tail.reverse)) =
       some (shiftCfg .prepend [] [] (a :: as).reverse.tail.reverse) := by
-    simpa [stepO] using
+    simpa [stepO] using!
       shift_step_second_nil ([] : List Bool) (a :: as).reverse.tail.reverse
   have h₄ : (stepO^[1])
       (some (shiftCfg .prepend [] [] (a :: as).reverse.tail.reverse)) =
       some (shiftCfg .done [] [] (false :: (a :: as).reverse.tail.reverse)) := by
-    simpa [stepO] using
+    simpa [stepO] using!
       shift_step_prepend ([] : List Bool) ([] : List Bool) (a :: as).reverse.tail.reverse
   have h01 := chain hfirst h₁
   have h02 := chain h01 h₂

@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.SparseLookup
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -181,7 +183,7 @@ theorem cellTransfer_fixed_correct (w a v : ℕ)
         (encodeFixedWord w v ++ .cellEnd :: suffix)
         ((fixedBits w a).reverse.map SparseSymbol.bit ++ address) value
         (.wordEnd :: (fixedBits w a).reverse.map SparseSymbol.bit ++ backup)) := by
-    simpa [stepO, List.map_reverse] using
+    simpa [stepO, List.map_reverse] using!
       cellTransfer_step_address_end
         (encodeFixedWord w v ++ .cellEnd :: suffix)
         ((fixedBits w a).reverse.map SparseSymbol.bit ++ address) value
@@ -200,7 +202,7 @@ theorem cellTransfer_fixed_correct (w a v : ℕ)
         ((fixedBits w v).reverse.map SparseSymbol.bit ++ value)
         (.wordEnd :: ((fixedBits w v).reverse.map SparseSymbol.bit ++
           (.wordEnd :: (fixedBits w a).reverse.map SparseSymbol.bit ++ backup)))) := by
-    simpa [stepO, List.map_reverse] using
+    simpa [stepO, List.map_reverse] using!
       cellTransfer_step_value_end (.cellEnd :: suffix)
         ((fixedBits w a).reverse.map SparseSymbol.bit ++ address)
         ((fixedBits w v).reverse.map SparseSymbol.bit ++ value)
@@ -217,7 +219,7 @@ theorem cellTransfer_fixed_correct (w a v : ℕ)
         ((fixedBits w v).reverse.map SparseSymbol.bit ++ value)
         (.cellEnd :: .wordEnd :: ((fixedBits w v).reverse.map SparseSymbol.bit ++
           (.wordEnd :: (fixedBits w a).reverse.map SparseSymbol.bit ++ backup)))) := by
-    simpa [stepO, List.map_reverse] using
+    simpa [stepO, List.map_reverse] using!
       cellTransfer_step_cell_end suffix
         ((fixedBits w a).reverse.map SparseSymbol.bit ++ address)
         ((fixedBits w v).reverse.map SparseSymbol.bit ++ value)

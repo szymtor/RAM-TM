@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.FullSubtractMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
@@ -150,7 +153,7 @@ theorem subtractInstruction_finish {N : Nat} {R : Type}
       (by
         rw [subLens_get_moveLens_put,
           FullInterpreterState.subLens.get_put])
-      force (by simpa using hforce) with
+      force (by simpa using! hforce) with
     ⟨subtractState, hsubtract⟩
   have htail := chain_liftRightProgram (subtractResetProgram o)
     (fullSubtractProgram returnLabel right) hreset hsubtract
@@ -209,7 +212,7 @@ theorem subtractInstruction_correct_of_operand_lt {N : Nat} {R : Type}
       have hfinish := subtractInstruction_finish (.lit n) hN returnLabel right
         w a ha m base state operandState (2 * w + 3) hbound
         (by simpa [operandEvalProgram, operandEvalStartCfg, operandArgument,
-          embedOperandReturnCfg, operandState] using hoperand)
+          embedOperandReturnCfg, operandState] using! hoperand)
         false (by
           simp only [operandForcesSubtractionZero]
           change ((FullInterpreterState.literalLens.get operandState).remaining.val !=
@@ -291,7 +294,7 @@ theorem subtractInstruction_correct {N : Nat} {R : Type}
         have hfinish := subtractInstruction_finish (.lit n) hN returnLabel right
           w a ha m base state operandState (2 * w + 3) hbound
           (by simpa [operandEvalProgram, operandEvalStartCfg, operandArgument,
-            embedOperandReturnCfg, operandState] using hoperand)
+            embedOperandReturnCfg, operandState] using! hoperand)
           true (by
             simp only [operandForcesSubtractionZero]
             change ((FullInterpreterState.literalLens.get operandState).remaining.val !=

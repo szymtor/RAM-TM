@@ -138,7 +138,7 @@ theorem fullDivideClean_zero_correct {N : Nat} {R : Type}
   let coreState := FullInterpreterState.divLens.put state
     { (default : DivControl) with divisorNonzero := false }
   rw [divideFirstCleanup_bridge (R := R) w 0 0 0 m base coreState
-    (by simpa [coreState] using hmove)] at hcore
+    (by simpa [coreState] using! hmove)] at hcore
   have hfirstRaw := run_lensPhase_to_right (discardCoreRenaming .work1)
     FullInterpreterState.moveLens discardProgram .done (by rfl)
     (Sum.inl DiscardLabel.loop) (divideCleanupFinalProgram returnLabel right)
@@ -216,7 +216,7 @@ theorem fullDivideClean_positive_correct {N : Nat} {R : Type}
   let coreState := FullInterpreterState.divLens.put state
     { (default : DivControl) with divisorNonzero := true }
   rw [divideFirstCleanup_bridge (R := R) w d (a % d) (a / d) m base coreState
-    (by simpa [coreState] using hmove)]
+    (by simpa [coreState] using! hmove)]
     at hcore
   have hfirstRaw := run_lensPhase_to_right (discardCoreRenaming .work1)
     FullInterpreterState.moveLens discardProgram .done (by rfl)

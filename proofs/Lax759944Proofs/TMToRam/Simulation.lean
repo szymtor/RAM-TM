@@ -1,5 +1,8 @@
 import Lax759944Proofs.TMToRam.NumericSemantics
 
+-- Preserve Lean 4.30 definition unfolding during elaboration.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.TMToRam
 
 open Turing
@@ -143,7 +146,7 @@ theorem numericStmt_exec_encode (tm : FinTM2) (q : TM2.Stmt tm.Γ tm.Λ tm.σ)
       rw [show (conditionTable tm f).getD
           (FinTM2.encodeNumericState tm ⟨l, s, S⟩ hS).state 0 =
           (if f s then 1 else 0) by
-        simpa [FinTM2.encodeNumericState] using conditionTable_getD tm f s]
+        simpa [FinTM2.encodeNumericState] using! conditionTable_getD tm f s]
       cases hf : f s
       · simp [hf]
         exact ih₂ (fun z hz => hgen z (.branch_right hz)) l s S hS

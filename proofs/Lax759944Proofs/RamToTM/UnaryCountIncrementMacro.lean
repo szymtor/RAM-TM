@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.IncrementWordMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -129,7 +132,7 @@ theorem countIncrement_one {count : List SparseSymbol} (w n : Nat) :
       some (countIncrementCfg (.inr .loop) count
         ((fixedBits w (n + 1)).map SparseSymbol.bit) []) := by
     convert hlocal using 1
-    case h.e'_2 =>
+    case e'_2 =>
       unfold countIncrementProgram
       rw [show 2 * w + 3 = 2 * w + 2 + 1 by omega]
       congr 2
@@ -141,7 +144,7 @@ theorem countIncrement_one {count : List SparseSymbol} (w n : Nat) :
         rfl
       · funext k
         cases k <;> rfl
-    case h.e'_3 =>
+    case e'_3 =>
       congr 1
       simp [countIncrementCfg, lensReturnCfg, incrementCfg,
         incrementStacks, renamedStacks, incrementCountRenaming,

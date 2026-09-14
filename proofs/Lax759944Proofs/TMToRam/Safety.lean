@@ -7,6 +7,9 @@ resource obligation is that a stack has a free cell whenever a statement
 pushes onto it.
 -/
 
+-- Preserve Lean 4.30 definition unfolding during elaboration.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.TMToRam
 
 open Turing
@@ -146,7 +149,7 @@ theorem FinTM2.numericStmt_safe_encode (tm : FinTM2)
       simp only [numericStmt, SafeExec]
       refine ⟨?_, ?_, ?_⟩
       · simpa [FinTM2.encodeNumericState, FinTM2.stateCode] using finCode_lt s
-      · simpa [FinTM2.encodeNumericState_stack] using hcap.1
+      · simpa [FinTM2.encodeNumericState_stack] using! hcap.1
       · rw [hmid]
         exact ih (fun z hz => hgen z (.push_next hz)) l s S' hS' hcap.2
   | peek k f q ih =>
@@ -178,7 +181,7 @@ theorem FinTM2.numericStmt_safe_encode (tm : FinTM2)
         · exact hlookup
         · rfl
       simp only [numericStmt, SafeExec]
-      refine ⟨by simpa [headStateTable_length] using hidx, ?_⟩
+      refine ⟨by simpa [headStateTable_length] using! hidx, ?_⟩
       rw [henc]
       exact ih (fun z hz => hgen z (.peek_next hz)) l s' S hS hcap
   | pop k f q ih =>
@@ -195,7 +198,7 @@ theorem FinTM2.numericStmt_safe_encode (tm : FinTM2)
           exact hS j a ha
       have hidx := FinTM2.encoded_head_index_lt tm k s S hS
       simp only [numericStmt, SafeExec]
-      refine ⟨by simpa [headStateTable_length] using hidx, ?_⟩
+      refine ⟨by simpa [headStateTable_length] using! hidx, ?_⟩
       have hlookup :
           (headStateTable tm k f).getD
               ((FinTM2.encodeNumericState tm ⟨l, s, S⟩ hS).state *
@@ -256,7 +259,7 @@ theorem FinTM2.numericStmt_safe_encode (tm : FinTM2)
       · rw [show (conditionTable tm f).getD
             (FinTM2.encodeNumericState tm ⟨l, s, S⟩ hS).state 0 =
             (if f s then 1 else 0) by
-          simpa [FinTM2.encodeNumericState] using conditionTable_getD tm f s]
+          simpa [FinTM2.encodeNumericState] using! conditionTable_getD tm f s]
         cases hf : f s
         · change (if f s then
               FinTM2.CapacitySafe tm capacity yes s S
@@ -540,7 +543,7 @@ noncomputable def FinTM2.safeRunWitness_of_outputsInTime (tm : FinTM2)
     SafeRunWitness tm (initList tm input) (haltList tm output) bound := by
   let typed := TypedRun.of_iterate tm hrun.steps (initList tm input)
     (haltList tm output) (FinTM2.initList_stacksWithin tm input)
-    (by simpa only using hrun.evals_in_steps) (by simp [haltList])
+    (by simpa only using! hrun.evals_in_steps) (by simp [haltList])
   let safe := typed.toCanonicalSafeRun
   exact {
     steps := hrun.steps
@@ -561,7 +564,7 @@ theorem FinTM2.output_length_le_of_outputsInTime (tm : FinTM2)
       input.length + bound * FinTM2.machinePushBudget tm tm.k₁ := by
   let typed := TypedRun.of_iterate tm hrun.steps (initList tm input)
     (haltList tm output) (FinTM2.initList_stacksWithin tm input)
-    (by simpa only using hrun.evals_in_steps) (by simp [haltList])
+    (by simpa only using! hrun.evals_in_steps) (by simp [haltList])
   have hlen := typed.final_stack_length_le tm.k₁
   have hsteps := hrun.steps_le_m
   have hmul : hrun.steps * FinTM2.machinePushBudget tm tm.k₁ ≤

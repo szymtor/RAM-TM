@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.SymbolMoveMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -208,9 +211,6 @@ def lookupCellCfg (label : LookupCellLabel) (equal : Bool)
     ⟨none, equal, none, none⟩
     (lookupCellStacks source [] value cellBackup query addressBackup queryBackup)) = _
   simp [lookupCellCompareIteration, lookupCellCfg, lookupCellStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 theorem lookupCell_address_iterate (equal : Bool) (xs : List Bool)
     (suffix address value cellBackup query addressBackup queryBackup :

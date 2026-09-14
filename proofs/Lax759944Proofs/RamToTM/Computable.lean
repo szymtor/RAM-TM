@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.Polytime
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Polynomial Lax759944Proofs.Microcode
@@ -74,7 +76,7 @@ theorem ramInTime_to_turingInPolynomialOverhead (p : Program)
   rw [ramSimulation_initList]
   simp only [Option.map_some]
   rw [ramSimulation_haltList]
-  simpa using htm
+  simpa using! htm
 
 end
 

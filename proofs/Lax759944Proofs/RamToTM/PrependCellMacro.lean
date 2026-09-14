@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.LiteralWordMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -89,8 +92,6 @@ def prependCellCfg (label : PrependCellLabel)
   simp [prependCellMachine, prependCellMoveIteration, prependCellCfg,
     prependCellStacks]
   congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem prependCell_step_addressEnd (address value memory : List SparseSymbol) :
     prependCellMachine.step (prependCellCfg .addressEnd address value memory) =
@@ -116,8 +117,6 @@ def prependCellCfg (label : PrependCellLabel)
   simp [prependCellMachine, prependCellMoveIteration, prependCellCfg,
     prependCellStacks]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem prependCell_value_iterate (address value memory : List SparseSymbol) :
     ((fun o : Option prependCellMachine.Cfg => o.bind prependCellMachine.step)^[

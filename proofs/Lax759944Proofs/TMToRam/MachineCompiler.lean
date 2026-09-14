@@ -8,6 +8,9 @@ the corresponding compiled statement.  Its enclosing loop stops precisely
 when the zero/`none` label is reached.
 -/
 
+-- Preserve Lean 4.30 definition unfolding during elaboration.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.TMToRam
 
 open Turing
@@ -593,7 +596,7 @@ theorem compileLabelList_correct (tm : FinTM2) [Fintype tm.Λ]
             (by simpa [ql] using hsafe)
         refine ⟨σ', 1 + Cond.size
             (.eq (.var labelVar) (.lit (finCode target + 1))) + cost, ?_, ?_⟩
-        · simpa [compileLabelList, ql, current, rest] using
+        · simpa [compileLabelList, ql, current, rest] using!
             BigStep.ite_true (by simp [Cond.eval, Expr.eval, hvar]) hrun
         · simpa [ql] using hfinal
       · have hmem' : target ∈ labels := by
@@ -616,7 +619,7 @@ theorem compileLabelList_correct (tm : FinTM2) [Fintype tm.Λ]
           exact hcode (congrArg (· + 1) h)
         refine ⟨σ', 1 + Cond.size
             (.eq (.var labelVar) (.lit (finCode l + 1))) + cost, ?_, hfinal⟩
-        simpa [compileLabelList, ql, current, rest] using
+        simpa [compileLabelList, ql, current, rest] using!
           BigStep.ite_false (by simp [Cond.eval, Expr.eval, hvar, hcode0]) hrun
 
 /-- Correctness of the complete dispatcher at any valid machine label. -/

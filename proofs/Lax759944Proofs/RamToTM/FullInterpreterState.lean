@@ -2,6 +2,9 @@ import Lax759944Proofs.RamToTM.BoundedLiteralWordMacro
 import Lax759944Proofs.RamToTM.InterpreterMacroState
 import Lax759944Proofs.RamToTM.WordCountdownMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 structure FullInterpreterState (N : ℕ) where

@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.FullDivideCleanup
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -203,7 +206,7 @@ theorem divideDividend_bridge {N : Nat} {R : Type}
   · symm
     have hz : FullInterpreterState.zeroLens.get
         (FullInterpreterState.moveLens.put state default) = default := by
-      simpa using hzero
+      simpa using! hzero
     rw [← hz, FullInterpreterState.zeroLens.put_get]
   · funext k
     cases k <;> simp [divideDivisorReadyStacks, divideDividendReadyStacks,
@@ -236,7 +239,7 @@ theorem divideZero_bridge {N : Nat} {R : Type}
   · symm
     have hd : FullInterpreterState.divLens.get
         (FullInterpreterState.zeroLens.put state default) = default := by
-      simpa using hdiv
+      simpa using! hdiv
     rw [← hd, FullInterpreterState.divLens.put_get]
   · funext k
     cases k <;> simp [divideZeroRenaming, divideZeroDecode,

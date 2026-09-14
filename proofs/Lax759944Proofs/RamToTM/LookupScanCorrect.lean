@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.LookupScanMachine
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -37,7 +39,7 @@ theorem lookupScan_skip_missing_prefix (w query : ℕ) (hq : query < 2 ^ w)
             [] [] [] ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed [])) =
           some (lookupScanCfg .address true (encodeSparseCell w (a, v) ++ rest)
             [] [] [] ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed []) := by
-        simpa [stepO] using hscan
+        simpa [stepO] using! hscan
       have hcell := lookupScan_failed_cell w a v query ha hq hne rest processed
       have htailRun := ih hm htail false
         ((encodeSparseCell w (a, v)).reverse ++ processed)
@@ -82,7 +84,7 @@ theorem lookupScan_found_after_prefix (w query v : ℕ) (hq : query < 2 ^ w)
         [] [] [] ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed' [])) =
       some (lookupScanCfg .address true (encodeSparseCell w (query, v) ++ suffix)
         [] [] [] ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed' []) := by
-    simpa [stepO] using hscan
+    simpa [stepO] using! hscan
   have hmatch := lookupScan_matching_cell w query v hq suffix processed'
   have chain {r s : ℕ} {x y z : Option lookupScanMachine.Cfg}
       (hr : (stepO^[r]) x = y) (hs : (stepO^[s]) y = z) :
@@ -157,7 +159,7 @@ theorem lookupScan_found (w query value : ℕ) (hq : query < 2 ^ w)
       (processed.length + 22)
   · have hrun := lookupScan_found_after_prefix w query value hq p hp hpfind
       (encodeSparseMemory w s ++ [.memoryEnd]) processed
-    simpa [n, encodeSparseMemory, List.append_assoc] using hrun
+    simpa [n, encodeSparseMemory, List.append_assoc] using! hrun
 
 /-- If no encoded cell has the requested address, the concrete scanner restores
 the complete memory tape and reaches its missing exit. -/
@@ -183,7 +185,7 @@ theorem lookupScan_all_missing (w query : ℕ) (hq : query < 2 ^ w)
             ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed [])) =
           some (lookupScanCfg .restoreMissing equal [.memoryEnd] [] [] []
             ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed []) := by
-        simpa [stepO] using h0
+        simpa [stepO] using! h0
       have h1 := lookupScan_restoreMissing_reaches_missing equal [.memoryEnd] [] [] []
         ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed []
       have chain {r s : ℕ} {x y z : Option lookupScanMachine.Cfg}
@@ -192,7 +194,7 @@ theorem lookupScan_all_missing (w query : ℕ) (hq : query < 2 ^ w)
         rw [Function.iterate_add_apply, hr, hs]
       have hrun := chain h0' h1
       simpa [stepO, List.append_assoc, Nat.add_comm, Nat.add_left_comm,
-        Nat.add_assoc] using hrun
+        Nat.add_assoc] using! hrun
   | cons cell m ih =>
       rcases cell with ⟨a, v⟩
       rcases hm with ⟨ha, hv, hm⟩
@@ -211,7 +213,7 @@ theorem lookupScan_all_missing (w query : ℕ) (hq : query < 2 ^ w)
             [] [] [] ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed [])) =
           some (lookupScanCfg .address true (encodeSparseCell w (a, v) ++ suffix)
             [] [] [] ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] processed []) := by
-        simpa [stepO] using hscan
+        simpa [stepO] using! hscan
       have hcell := lookupScan_failed_cell w a v query ha hq hne suffix processed
       have htailRun := ih hm htail false
         ((encodeSparseCell w (a, v)).reverse ++ processed)

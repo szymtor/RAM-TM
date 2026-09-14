@@ -151,7 +151,7 @@ theorem unifiedLookup_found {N : ℕ} {R : Type}
   have hout := congrArg (fun c => some (mapLabelCfg
     (fun l : UnifiedLookupTail R =>
       (Sum.inr l : UnifiedLookupLabel R)) c)) hb
-  simpa [unifiedLookupProgram, lookupScanMacroCfg, lookupScanCfg] using
+  simpa [unifiedLookupProgram, lookupScanMacroCfg, lookupScanCfg] using!
     h.trans hout
 
 theorem unifiedLookup_missing {N : ℕ} {R : Type}
@@ -197,7 +197,7 @@ theorem unifiedLookup_missing {N : ℕ} {R : Type}
         (encodeSparseMemory w m ++ [.memoryEnd]) [] [] []
         ((fixedBits w query).reverse.map SparseSymbol.bit) [] [] [] []) := by
     simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using
+      lookupScanMachine] using!
       lookupScan_all_missing w query hq m hm hmissing true []
   have h := run_lensMultiPhase_to_right lookupCoreRenaming
     FullInterpreterState.lookupLens lookupScanProgram lookupExit

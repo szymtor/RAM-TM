@@ -135,7 +135,7 @@ theorem shiftLeft_core_bridge {N : Nat} {R : Type}
   · rw [show ({ held := none } : MoveControl) = default by rfl]
     have hm : FullInterpreterState.moveLens.get
         (FullInterpreterState.shiftLens.put state default) = default := by
-      simpa using hmove
+      simpa using! hmove
     rw [← hm, FullInterpreterState.moveLens.put_get]
   · funext k
     cases k <;> simp [shiftRoundBase, shiftAfterCoreStacks, renamedStacks,

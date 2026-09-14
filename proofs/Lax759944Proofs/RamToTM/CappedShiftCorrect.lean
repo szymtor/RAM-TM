@@ -345,7 +345,7 @@ theorem cappedCountdown_start_bridge {N : Nat}
     cappedShiftCfg, cappedShiftStacks, cleanReturnCfg, shiftRoundBase,
     renamedStacks, countdownCoreRenaming, countdownCoreDecode]
   constructor
-  · exact ⟨.scan, rfl, rfl⟩
+  · exact Or.inl ⟨.scan, rfl, rfl⟩
   · funext k
     cases k <;> simp [shiftRoundBase, renamedStacks, countdownCoreRenaming,
       countdownCoreDecode, countdownCfg, countdownStacks,
@@ -393,7 +393,7 @@ theorem cappedLeft_start_bridge {N : Nat}
     cappedShiftCfg, cappedShiftStacks, cleanReturnCfg, shiftRoundBase,
     renamedStacks, shiftRoundRenaming, shiftRoundDecode]
   constructor
-  · exact ⟨.first, rfl, rfl⟩
+  · exact Or.inl ⟨.first, rfl, rfl⟩
   · constructor
     · rfl
     · funext k
@@ -418,7 +418,7 @@ theorem cappedRight_start_bridge {N : Nat}
     cleanReturnCfg, shiftRoundBase, renamedStacks, shiftRoundRenaming,
     shiftRoundDecode]
   constructor
-  · exact ⟨.discard, rfl, rfl⟩
+  · exact Or.inl ⟨.discard, rfl, rfl⟩
   · constructor
     · rfl
     · funext k
@@ -653,7 +653,7 @@ theorem cappedShift_cleanup_roundBase {N : Nat} (rightShift : Bool)
     funext k
     cases k <;> simp [shiftRoundBase, operandBoundaryBase, Function.update]
   simpa [cappedShiftCfg, cappedShiftStacks, List.length_map,
-    fixedBits_length, htapes] using hrun
+    fixedBits_length, htapes] using! hrun
 
 def zeroShiftCleanupBase (w word : Nat) (fuel : List SparseSymbol)
     (m : SparseMemory) (base : CoreStack -> List SparseSymbol) :

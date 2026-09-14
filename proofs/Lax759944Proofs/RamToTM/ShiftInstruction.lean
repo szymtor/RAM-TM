@@ -3,6 +3,9 @@ import Lax759944Proofs.RamToTM.FullCopyMacro
 import Lax759944Proofs.RamToTM.ConditionalAccumulatorZeroPhase
 import Lax759944Proofs.RamToTM.LiteralPreservation
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
@@ -756,7 +759,7 @@ theorem shiftLeftInstruction_correct {N : Nat} {R : Type}
           state base with ⟨operandSteps, hbound, operandState, hoperand⟩
       apply shiftLeftInstruction_finish (.mem address) hN returnLabel right
         w accumulator hacc hw m base state operandState operandSteps hbound
-      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using hoperand
+      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using! hoperand
       · simp [operandLiteralOversized, operandWordValue,
           Nat.mod_eq_of_lt (sparseValue_mem_lt hm address)]
   | ind address =>
@@ -766,7 +769,7 @@ theorem shiftLeftInstruction_correct {N : Nat} {R : Type}
           state base with ⟨operandSteps, hbound, operandState, hoperand⟩
       apply shiftLeftInstruction_finish (.ind address) hN returnLabel right
         w accumulator hacc hw m base state operandState operandSteps hbound
-      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using hoperand
+      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using! hoperand
       · simp [operandLiteralOversized, operandWordValue,
           Nat.mod_eq_of_lt (sparseValue_ind_lt hm address)]
   | lit n =>
@@ -783,7 +786,7 @@ theorem shiftLeftInstruction_correct {N : Nat} {R : Type}
       apply shiftLeftInstruction_finish (.lit n) hN returnLabel right
         w accumulator hacc hw m base state operandState (2 * w + 3) hbound
       · simpa [shiftInstructionProgram, operandEvalStartCfg, operandArgument,
-          embedOperandReturnCfg, shiftSetupStartCfg, operandState] using hoperand
+          embedOperandReturnCfg, shiftSetupStartCfg, operandState] using! hoperand
       · by_cases hnlt : n < 2 ^ w
         · have hzero : n / 2 ^ w = 0 :=
             (literalWord_remaining_eq_zero_iff n w).2 hnlt
@@ -899,7 +902,7 @@ theorem shiftRightInstruction_correct {N : Nat} {R : Type}
           state base with ⟨operandSteps, hbound, operandState, hoperand⟩
       apply shiftRightInstruction_finish (.mem address) hN returnLabel right
         w accumulator hacc hw m base state operandState operandSteps hbound
-      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using hoperand
+      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using! hoperand
       · have hv := sparseValue_mem_lt hm address
         simp [operandLiteralOversized, operandWordValue,
           Nat.mod_eq_of_lt hv,
@@ -913,7 +916,7 @@ theorem shiftRightInstruction_correct {N : Nat} {R : Type}
           state base with ⟨operandSteps, hbound, operandState, hoperand⟩
       apply shiftRightInstruction_finish (.ind address) hN returnLabel right
         w accumulator hacc hw m base state operandState operandSteps hbound
-      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using hoperand
+      · simpa [shiftInstructionProgram, shiftSetupStartCfg] using! hoperand
       · have hv := sparseValue_ind_lt hm address
         simp [operandLiteralOversized, operandWordValue,
           Nat.mod_eq_of_lt hv,
@@ -934,7 +937,7 @@ theorem shiftRightInstruction_correct {N : Nat} {R : Type}
       apply shiftRightInstruction_finish (.lit n) hN returnLabel right
         w accumulator hacc hw m base state operandState (2 * w + 3) hbound
       · simpa [shiftInstructionProgram, operandEvalStartCfg, operandArgument,
-          embedOperandReturnCfg, shiftSetupStartCfg, operandState] using hoperand
+          embedOperandReturnCfg, shiftSetupStartCfg, operandState] using! hoperand
       · by_cases hnlt : n < 2 ^ w
         · have hzero : n / 2 ^ w = 0 :=
             (literalWord_remaining_eq_zero_iff n w).2 hnlt

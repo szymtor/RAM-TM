@@ -64,7 +64,7 @@ theorem shiftRight_core_bridge {N : Nat} {R : Type}
   constructor
   · have hm : FullInterpreterState.moveLens.get
         (FullInterpreterState.shiftLens.put state default) = default := by
-      simpa using hmove
+      simpa using! hmove
     rw [← hm, FullInterpreterState.moveLens.put_get]
     rfl
   · funext k

@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.ZeroWordMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -66,9 +69,6 @@ def literalWordCfg (n : ℕ) (label : LiteralWordLabel) (remaining : Fin (n + 1)
       (literalWordCfg n .emit remaining [] backup result) =
     some (literalWordCfg n .restore remaining [] backup result) := by
   simp [literalWordMachine, literalWordCfg, literalWordStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem literalWord_step_emit_cons (n : ℕ) (remaining : Fin (n + 1))
     (a : SparseSymbol) (query backup result : List SparseSymbol) :
@@ -90,9 +90,6 @@ def literalWordCfg (n : ℕ) (label : LiteralWordLabel) (remaining : Fin (n + 1)
       (literalWordCfg n .restore remaining query [] result) =
     some (literalWordCfg n .done remaining query [] result) := by
   simp [literalWordMachine, literalWordCfg, literalWordStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem literalWord_step_restore_cons (n : ℕ) (remaining : Fin (n + 1))
     (a : SparseSymbol) (query backup result : List SparseSymbol) :

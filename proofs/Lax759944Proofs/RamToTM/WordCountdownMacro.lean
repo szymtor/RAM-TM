@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.DivideMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -159,9 +162,6 @@ theorem countdown_scan_iterate (state : CountdownControl)
     countdownMachine.step (countdownCfg .restore state count []) =
       some (countdownCfg .positive { state with held := none } count []) := by
   simp [countdownMachine, countdownCfg, countdownStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 theorem countdown_restore_iterate (state : CountdownControl)
     (count temp : List Bool) (hheld : state.held = none) :
@@ -271,11 +271,11 @@ theorem countdownMachine_positive_correct (w d : Nat)
     simp only [fixedBits_length]
     rw [← fixedBits_zero w]
     rw [← fixedBits_sub_borrow w d 0 true
-      (show 0 + true.toNat ≤ d by simpa using hd0)]
+      (show 0 + true.toNat ≤ d by simpa using! hd0)]
     simp
   refine ⟨{ scanState with held := none }, ?_⟩
   have ht : w + 1 + w + 1 = 2 * w + 2 := by omega
   rw [ht] at hall
-  simpa [hbits] using hall
+  simpa [hbits] using! hall
 
 end Lax759944Proofs.RamToTM

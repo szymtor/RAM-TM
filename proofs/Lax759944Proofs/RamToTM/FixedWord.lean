@@ -34,7 +34,7 @@ theorem bit_mod_two_pow (b : Bool) (n w : ℕ) :
   have hb : b.toNat ≤ 1 := by cases b <;> simp
   have hsmall : 2 * (n % M) + b.toNat < M * 2 := by omega
   rw [← Nat.mod_eq_of_lt hsmall]
-  simpa [M, Nat.mul_comm] using
+  simpa [M, Nat.mul_comm] using!
     (Nat.ModEq.mul_left' 2 (Nat.mod_modEq n M)).add
       (Nat.ModEq.rfl : b.toNat ≡ b.toNat [MOD 2 * M])
 

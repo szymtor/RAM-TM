@@ -166,7 +166,7 @@ theorem restoreCompared_correct {N : Nat} {R : Type}
             ((fixedBits w b).map SparseSymbol.bit))
           firstState firstBase)) := by
     simpa only [List.length_map, List.length_reverse, fixedBits_length,
-      List.append_nil, List.map_reverse, List.reverse_reverse] using hsecondRaw
+      List.append_nil, List.map_reverse, List.reverse_reverse] using! hsecondRaw
   dsimp [firstState, firstBase] at hsecond'
   have hchain := chain_liftRightProgram (m := w + 1 + 1) (n := w + 2)
     (lensPhaseLeft

@@ -277,9 +277,9 @@ theorem outputLoop_correct (outputStack separatorCode zeroCode oneCode : ℕ)
         simp [Expr.eval, σ₁, σ₂, hget]
       have hmatch₂ : d.Matches σ₂ := by
         rcases hmatch with ⟨ho, hv, hp, hh⟩
-        exact ⟨ho, by simpa [σ₂, σ₁, Env.setVar] using hv,
-          by simpa [σ₂, σ₁, Env.setVar] using hp,
-          by simpa [σ₂, σ₁, Env.setVar] using hh⟩
+        exact ⟨ho, by simpa [σ₂, σ₁, Env.setVar] using! hv,
+          by simpa [σ₂, σ₁, Env.setVar] using! hp,
+          by simpa [σ₂, σ₁, Env.setVar] using! hh⟩
       obtain ⟨σ₃, consumeCost, hconsume, hconsumeBound, hmatch₃⟩ :=
         consumeOutputSymbol_correct separatorCode zeroCode oneCode a σ₂ d
           (by simp [σ₂, Env.setVar]) hmatch₂
@@ -445,7 +445,7 @@ theorem flushDecoder_correct (σ : Env) (d : DecoderAcc)
   rcases hmatch with ⟨hout, hvalue, hplace, hactive⟩
   by_cases hz : d.active = 0
   · refine ⟨σ, 5, ?_, by omega, ?_⟩
-    · simpa [Cond.size, Expr.size] using BigStep.ite_true
+    · simpa [Cond.size, Expr.size] using! BigStep.ite_true
         (by simp [Cond.eval, Expr.eval, hactive, hz])
         (BigStep.skip (σ := σ))
     · simp [DecoderAcc.flush, hz, hout]
@@ -455,7 +455,7 @@ theorem flushDecoder_correct (σ : Env) (d : DecoderAcc)
         (BigStep.write (σ := σ) (e := .var outputValueVar) (v := d.value)
           (by simp [Expr.eval, hvalue]))
     refine ⟨σ', 6, ?_, by omega, ?_⟩
-    · simpa [Cond.size, Expr.size] using BigStep.ite_false
+    · simpa [Cond.size, Expr.size] using! BigStep.ite_false
         (by simp [Cond.eval, Expr.eval, hactive, hz]) hw
     · simp [σ', DecoderAcc.flush, hz, hout]
 

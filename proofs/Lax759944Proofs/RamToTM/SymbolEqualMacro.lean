@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.SparseInvariant
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -82,9 +84,6 @@ def symbolEqualPartialDoneCfg (equal : Bool) (right leftBackup rightBackup :
       SymbolEqualLabel.loop SymbolEqualLabel.done)
     ⟨equal, none, none⟩ (symbolEqualStacks [] right lb rb)) = _
   simp [symbolEqualIteration, symbolEqualPartialDoneCfg, symbolEqualStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem symbolEqual_step_cons (equal : Bool) (a b : SparseSymbol)
     (as bs lb rb : List SparseSymbol) :

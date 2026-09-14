@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.UnaryPowerMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -222,7 +225,7 @@ theorem inputScanStacks_scanned (input : List Symbol) :
   funext k
   cases k with
   | input => simp [inputScanStacks, inputWidthInitialStacks,
-      inputWidthScannedStacks]; rfl
+      inputWidthScannedStacks]
   | output => simp [inputScanStacks, inputWidthInitialStacks,
       inputWidthScannedStacks]
   | core k => cases k <;> simp [inputScanStacks, inputWidthInitialStacks,

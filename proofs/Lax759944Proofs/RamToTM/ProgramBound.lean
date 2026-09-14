@@ -1,6 +1,9 @@
 import Lax759944Proofs.RamToTM.ReadInstruction
 import Lax759944Proofs.RamToTM.ShiftInstruction
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Lax759944Proofs.Microcode
@@ -87,7 +90,7 @@ theorem operandEvalStartCfg_coreStacks {N : Nat} {R : Type} (o : Op)
       lensRenamedCfg, boundedLiteralWordCfg, literalWordStacks,
       renamedStacks, literalWordCoreRenaming, literalWordCoreDecode,
       literalQueryCoreRenaming, literalQueryCoreDecode,
-      operandBoundaryBase_coreStacks, BoundedLiteralControl.initial]
+      operandBoundaryBase_coreStacks, BoundedLiteralControl.initial, operandArgument]
   all_goals
     congr 2
     funext k

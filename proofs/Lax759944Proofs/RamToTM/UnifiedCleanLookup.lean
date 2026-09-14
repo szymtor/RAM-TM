@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.UnifiedLookupPhase
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -149,13 +152,11 @@ theorem zero_return_bridge {N : ℕ} {R : Type}
     zeroWordCoreRenaming, zeroWordCoreDecode, zeroWordCfg,
     zeroWordStacks, operandBoundaryBase, operandResultBase,
     renamedStacks, fixedBits_zero, List.map_reverse]
-  constructor
-  · rfl
-  · funext k
-    cases k <;> simp [renamedStacks, zeroWordCoreRenaming,
-      zeroWordCoreDecode, zeroWordCfg, zeroWordStacks,
-      operandBoundaryBase, operandResultBase, fixedBits_zero,
-      List.map_reverse]
+  funext k
+  cases k <;> simp [renamedStacks, zeroWordCoreRenaming,
+    zeroWordCoreDecode, zeroWordCfg, zeroWordStacks,
+    operandBoundaryBase, operandResultBase, fixedBits_zero,
+    List.map_reverse]
 
 theorem unifiedCleanLookup_found {N : ℕ} {R : Type}
     (w accumulator query value : ℕ) (hq : query < 2 ^ w)
@@ -230,7 +231,7 @@ theorem unifiedCleanLookup_found {N : ℕ} {R : Type}
     (unifiedCleanTailProgram returnLabel right) hlookup htail
   refine ⟨lookupSteps + (w + 2 + 1), ?_, ?_⟩
   · omega
-  · simpa [unifiedCleanLookupProgram, foundState] using hchain
+  · simpa [unifiedCleanLookupProgram, foundState] using! hchain
 
 theorem unifiedCleanLookup_missing {N : ℕ} {R : Type}
     (w accumulator query : ℕ) (hq : query < 2 ^ w)
@@ -328,7 +329,7 @@ theorem unifiedCleanLookup_missing {N : ℕ} {R : Type}
       (w + 2 + (1 + (2 * w + 3))) =
       m.length * (12 * w + 22) + 3 * w + 9 := by omega
   rw [htime] at hchain
-  simpa [unifiedCleanLookupProgram, missingState] using hchain
+  simpa [unifiedCleanLookupProgram, missingState] using! hchain
 
 theorem unifiedCleanLookup_missing_clean {N : ℕ} {R : Type}
     (w accumulator query : ℕ) (hq : query < 2 ^ w)

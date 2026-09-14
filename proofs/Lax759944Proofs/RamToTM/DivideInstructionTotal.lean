@@ -124,7 +124,7 @@ theorem divideInstructionTotal_correct {N : Nat} {R : Type}
           state base with ⟨steps, hsteps, operandState, hoperand⟩
       apply divideInstructionTotal_finish (.mem address) hN returnLabel right
         w a ha m base state operandState steps hsteps
-      · simpa [divideInstructionTotalProgram] using hoperand
+      · simpa [divideInstructionTotalProgram] using! hoperand
       · simp [operandLiteralOversized, operandWordValue,
           Nat.mod_eq_of_lt (sparseValue_mem_lt hm address)]
   | ind address =>
@@ -134,7 +134,7 @@ theorem divideInstructionTotal_correct {N : Nat} {R : Type}
           state base with ⟨steps, hsteps, operandState, hoperand⟩
       apply divideInstructionTotal_finish (.ind address) hN returnLabel right
         w a ha m base state operandState steps hsteps
-      · simpa [divideInstructionTotalProgram] using hoperand
+      · simpa [divideInstructionTotalProgram] using! hoperand
       · simp [operandLiteralOversized, operandWordValue,
           Nat.mod_eq_of_lt (sparseValue_ind_lt hm address)]
   | lit n =>
@@ -151,7 +151,7 @@ theorem divideInstructionTotal_correct {N : Nat} {R : Type}
       apply divideInstructionTotal_finish (.lit n) hN returnLabel right
         w a ha m base state operandState (2 * w + 3) hbound
       · simpa [divideInstructionTotalProgram, operandEvalStartCfg,
-          operandArgument, embedOperandReturnCfg, operandState] using hoperand
+          operandArgument, embedOperandReturnCfg, operandState] using! hoperand
       · by_cases hnlt : n < 2 ^ w
         · have hzero : n / 2 ^ w = 0 :=
             (literalWord_remaining_eq_zero_iff n w).2 hnlt

@@ -2,6 +2,9 @@ import Lax759944Proofs.RamToTM.UnifiedCleanLookup
 import Lax759944Proofs.RamToTM.BoundedLiteralGlobal
 import Lax759944Proofs.RamToTM.QueryTransferPipeline
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2

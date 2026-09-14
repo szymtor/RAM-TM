@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.CoreInitialization
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2

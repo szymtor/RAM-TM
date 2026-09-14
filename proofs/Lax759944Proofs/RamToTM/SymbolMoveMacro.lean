@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.CellTransferMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -68,8 +71,6 @@ def symbolMoveDoneCfg (target : List SparseSymbol) : symbolMoveMachine.Cfg where
   simp [symbolMoveIteration, symbolMoveDoneCfg, symbolMoveCfgState,
     symbolMoveStacks]
   congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem symbolMove_step_state_cons (state : SymbolMoveControl)
     (a : SparseSymbol) (source target : List SparseSymbol) :
@@ -94,8 +95,6 @@ def symbolMoveDoneCfg (target : List SparseSymbol) : symbolMoveMachine.Cfg where
     default (symbolMoveStacks [] target)) = _
   simp [symbolMoveIteration, symbolMoveDoneCfg, symbolMoveStacks]
   congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem symbolMove_step_cons (a : SparseSymbol)
     (source target : List SparseSymbol) :
@@ -136,7 +135,7 @@ theorem symbolMove_reaches_done_from (state : SymbolMoveControl)
       (some (symbolMoveCfgState state source target)) =
       some (symbolMoveDoneCfg (source.reverse ++ target)) := by
   cases source with
-  | nil => simpa using symbolMove_step_state_nil state target
+  | nil => simpa using! symbolMove_step_state_nil state target
   | cons a source =>
       rw [List.length_cons,
         show source.length + 1 + 1 = (source.length + 1) + 1 by omega,

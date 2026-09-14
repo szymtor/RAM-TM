@@ -2,6 +2,8 @@ import Lax759944Proofs.RamToTM.FullInputPreprocessor
 import Lax759944Proofs.RamToTM.OutputAdapter
 import Lax759944Proofs.RamToTM.StackGrowthBounds
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
@@ -354,20 +356,20 @@ theorem middle_cleanupCost_le {p : Program} {N w steps : Nat}
     exact Nat.zero_le _
   have hdecodedCore (k : CoreStack) : (decodedTapes (.core k)).length ≤ bound := by
     cases k with
-    | accumulator => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hacc
-    | memory => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hmem
-    | input => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hinp
+    | accumulator => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hacc
+    | memory => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hmem
+    | input => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hinp
     | output =>
         dsimp [decodedTapes, outputAdapterStacks, wrapperCoreStacks]
         exact Nat.zero_le _
-    | work0 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw0
-    | work1 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw1
-    | work2 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw2
-    | work3 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw3
-    | work4 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw4
-    | work5 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw5
-    | work6 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw6
-    | work7 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using hw7
+    | work0 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw0
+    | work1 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw1
+    | work2 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw2
+    | work3 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw3
+    | work4 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw4
+    | work5 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw5
+    | work6 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw6
+    | work7 => simpa [decodedTapes, outputAdapterStacks, wrapperCoreStacks, bound] using! hw7
   dsimp only [actualCost]
   change 2 * (decodedTapes .input).length + 1 +
     2 * (decodedTapes (.core .accumulator)).length + 1 +
@@ -516,7 +518,7 @@ theorem combined_runsTo_complete (p : Program) (wordBound : Polynomial Nat)
   refine ⟨hmem, by simpa [hout] using houtLength,
     hcoreBound, hstopBound, hcleanupBound, ?_⟩
   simpa [w, middleStart, liftCoreCfg, finiteInterpreterCfg, mapLabelCfg,
-    embedMiddleCombined, Nat.add_assoc] using hall
+    embedMiddleCombined, Nat.add_assoc] using! hall
 
 end
 

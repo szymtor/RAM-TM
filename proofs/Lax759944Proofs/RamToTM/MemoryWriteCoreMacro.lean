@@ -46,7 +46,7 @@ theorem prependLocal_fixed_correct (w a v : ℕ) (memory : List SparseSymbol) :
     funext l
     rfl
   rw [hp]
-  simpa [prependLocalCfg, prependCellCfg] using
+  simpa [prependLocalCfg, prependCellCfg] using!
     prependCell_fixed_correct w a v memory
 
 theorem prepend_core_fixed_correct {Λx τ : Type}

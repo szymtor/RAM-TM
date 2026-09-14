@@ -19,6 +19,9 @@ the Turing-machine and word-RAM polynomial-time definitions in this
 submission.
 -/
 
+-- Preserve definition unfolding in the generated Fintype instance.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944.BinaryWordEncoding
 
 /-- The finite alphabet used to encode lists of natural numbers. -/

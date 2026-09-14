@@ -245,7 +245,7 @@ theorem fullSubtract_correct {N : Nat} {R : Type}
           (cleanReturnCfg returnLabel
             (FullInterpreterState.moveLens.put coreState default)
             (operandBoundaryBase w (if force then 0 else a - b) m base)))) := by
-    simpa only [show w + 2 + (w + 2) = 2 * w + 4 by omega] using htail
+    simpa only [show w + 2 + (w + 2) = 2 * w + 4 by omega] using! htail
   have hall := chain_liftRightProgram (m := w + 2) (n := 2 * w + 4)
     (lensPhaseLeft
       (symbolMoveCoreRenaming .work0 .work1 (by decide))

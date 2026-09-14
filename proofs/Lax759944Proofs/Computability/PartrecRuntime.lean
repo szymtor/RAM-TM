@@ -218,7 +218,7 @@ theorem partrecPhysicalHaltsAt_computablePred (c : ToPartrec.Code) :
     unfold PartrecPhysicalHaltsAt
     infer_instance
   apply Computable.computablePred
-  simpa [PartrecPhysicalHaltsAt] using
+  simpa! [PartrecPhysicalHaltsAt] using!
     ((partrecPhysicalHaltedBool_primrec₂ c).comp Primrec.fst
       Primrec.snd).to_comp
 
@@ -261,7 +261,7 @@ theorem partrecSparseHalt_of_eval {c : ToPartrec.Code}
   let hc := FinTM2.initList_stacksWithin tm input
   obtain ⟨hhalt, hnum⟩ := FinTM2.numeric_iterate_encode tm typed.steps
     (Turing.initList tm input) (Turing.haltList tm output) hc
-    (by simpa [typed, tm, input, output] using typed.evals_in_steps)
+    (by simpa [typed, tm, input, output] using! typed.evals_in_steps)
   change ((numericStepOption tm)^[typed.steps])
       (some (FinTM2.encodeNumericState tm (Turing.initList tm input) hc)) =
     some (FinTM2.encodeNumericState tm (Turing.haltList tm output) hhalt) at hnum

@@ -105,7 +105,7 @@ theorem globalCountdown_zero_correct {N : Nat} {R : Type}
     (countdownExit zeroLabel positiveLabel) countdownOnExit
     (countdownExit_halt zeroLabel positiveLabel) right
     (sparseCountdown_zero_correct w) rfl (by rfl) state base
-  simpa [countdownMultiLeft, countdownOnExit] using h
+  simpa [countdownMultiLeft, countdownOnExit] using! h
 
 theorem globalCountdown_positive_correct {N : Nat} {R : Type}
     (zeroLabel positiveLabel : R)
@@ -135,6 +135,6 @@ theorem globalCountdown_positive_correct {N : Nat} {R : Type}
     (countdownExit zeroLabel positiveLabel) countdownOnExit
     (countdownExit_halt zeroLabel positiveLabel) right hrun rfl (by rfl)
     state base
-  simpa [countdownMultiLeft, countdownOnExit] using h
+  simpa [countdownMultiLeft, countdownOnExit] using! h
 
 end Lax759944Proofs.RamToTM

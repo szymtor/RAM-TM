@@ -103,7 +103,7 @@ theorem directOperand_correct_uniform {N : Nat} {R : Type}
         simp [operandEvalBound]
         omega, finalState, ?_⟩
       simpa [operandEvalStartCfg, operandArgument, operandWordValue,
-        sparseValue, Op.value, hread, finalState] using
+        sparseValue, Op.value, hread, finalState] using!
         directOperand_missing_clean address haN w accumulator m hm hfind
           returnLabel right state base
   | some value =>
@@ -129,7 +129,7 @@ theorem directOperand_correct_uniform {N : Nat} {R : Type}
       · simpa [operandEvalStartCfg, operandArgument, operandWordValue,
           sparseValue, Op.value, hread,
           Nat.mod_eq_of_lt hvalue, finalState]
-          using hrun
+          using! hrun
 
 theorem operandEval_correct {N : Nat} {R : Type}
     (o : Op) (hN : operandArgument o <= N)
@@ -156,12 +156,12 @@ theorem operandEval_correct {N : Nat} {R : Type}
       refine ⟨2 * w + 3, by simp [operandEvalBound]; omega,
         finalState, ?_⟩
       simpa [operandEvalProgram, operandEvalStartCfg, operandArgument,
-        embedOperandReturnCfg] using
+        embedOperandReturnCfg] using!
         literalOperand_correct n hN
           w accumulator m returnLabel right state base
   | mem a =>
       change a <= N at hN
-      simpa [operandEvalProgram, embedOperandReturnCfg] using
+      simpa [operandEvalProgram, embedOperandReturnCfg] using!
         directOperand_correct_uniform a hN w accumulator m hm
           returnLabel right state base
   | ind a =>
@@ -172,7 +172,7 @@ theorem operandEval_correct {N : Nat} {R : Type}
         SparseMemory.read_lt_of_normalized hm _
       simpa [operandEvalProgram, operandEvalStartCfg, operandArgument,
         embedOperandReturnCfg, operandEvalBound, operandWordValue,
-        sparseValue, Op.value, Nat.mod_eq_of_lt hp, Nat.mod_eq_of_lt hv] using
+        sparseValue, Op.value, Nat.mod_eq_of_lt hp, Nat.mod_eq_of_lt hv] using!
         indirectOperand_correct a hN w accumulator m hm returnLabel right
           state base
 
@@ -191,13 +191,13 @@ theorem transport_iterate_operand_right {N : Nat} {R : Type}
     some (embedOperandReturnCfg o d) := by
   cases o with
   | lit n =>
-      simpa [operandEvalProgram, embedOperandReturnCfg] using
+      simpa [operandEvalProgram, embedOperandReturnCfg] using!
         transport_iterate_literal_right returnLabel right hrun
   | mem a =>
-      simpa [operandEvalProgram, embedOperandReturnCfg] using
+      simpa [operandEvalProgram, embedOperandReturnCfg] using!
         transport_iterate_direct_right returnLabel right hrun
   | ind a =>
-      simpa [operandEvalProgram, embedOperandReturnCfg] using
+      simpa [operandEvalProgram, embedOperandReturnCfg] using!
         transport_iterate_indirect_right returnLabel right hrun
 
 end Lax759944Proofs.RamToTM

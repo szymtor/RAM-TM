@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.InputPreprocessorEmbedding
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -73,10 +76,6 @@ theorem coreInit_zero_copy_from {N : Nat} (markers acc backup : List SparseSymbo
   | nil =>
       simp [coreInitProgram, coreInitCfg, TM2.step, List.head?, List.tail,
         Option.isNone, Function.update]
-      funext k
-      cases k with
-      | input | output => rfl
-      | core k => cases k <;> rfl
   | cons marker markers ih =>
       have hs : TM2.step coreInitProgram
           (coreInitCfg .zeroCopy state
@@ -207,8 +206,6 @@ theorem coreInit_zero_copy {N w : Nat} (state : WrapperState N)
     | core k =>
         cases k <;>
           simp [fixedBits_zero, List.reverse_replicate, Function.update]
-        case accumulator => rfl
-        case work7 => exact List.append_nil _
   have hin := congrArg
     (fun cfg => ((fun o => o.bind (TM2.step coreInitProgram))^[w + 1]) cfg)
     (congrArg some hstart).symm

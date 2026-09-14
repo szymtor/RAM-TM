@@ -52,7 +52,7 @@ theorem FinTM2.numericStep_encode (tm : FinTM2) (c : tm.Cfg)
   rcases c with ⟨l, s, S⟩
   cases l with
   | none =>
-      simp [FinTM2.numericStep, FinTM2.encodeNumericState, FinTM2.step]
+      simp [FinTM2.numericStep, FinTM2.encodeNumericState, FinTM2.step, TM2.step]
   | some l =>
       have hsim := numericStmt_exec_encode tm (tm.m l)
         (FinTM2.generatedBy_main_available tm l) (some l) s S hc
@@ -120,7 +120,7 @@ theorem FinTM2.numeric_iterate_encode (tm : FinTM2) (t : ℕ) (c c' : tm.Cfg)
             rw [Function.iterate_succ_apply] at hrun
             change ((fun o : Option tm.Cfg => o.bind tm.step)^[t]) (tm.step c) =
               some c' at hrun
-            simpa [hs] using hrun
+            simpa [hs] using! hrun
           rw [iterate_bind_none] at this
           contradiction
       | some d =>
@@ -151,7 +151,7 @@ theorem FinTM2.numeric_evalsToInTime_encode (tm : FinTM2) (m : ℕ) (c c' : tm.C
           (some (FinTM2.encodeNumericState tm c hc)) =
         some (FinTM2.encodeNumericState tm c' hc') := by
   obtain ⟨hc', hnum⟩ := FinTM2.numeric_iterate_encode tm hrun.steps c c' hc
-    (by simpa only using hrun.evals_in_steps)
+    (by simpa only using! hrun.evals_in_steps)
   exact ⟨hrun.steps, hrun.steps_le_m, hc', hnum⟩
 
 /-- Specialization of whole-run correctness to mathlib's TM2 input/output

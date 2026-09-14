@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.BitMacros
 
+-- Preserve Lean 4.30 definition unfolding during elaboration.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -74,9 +77,6 @@ def compareDoneCfg (less : Bool) (leftBackup rightBackup : List Bool) :
       CompareStack.rightBackup CompareLabel.loop CompareLabel.done)
     ⟨less, none, none⟩ (compareStacks [] right lb rb)) = _
   simp [compareIteration, compareStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem compareMachine_step_cons (less a b : Bool)
     (as bs lb rb : List Bool) :

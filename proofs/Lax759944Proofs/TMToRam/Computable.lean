@@ -105,7 +105,7 @@ theorem turingWithInputTime_to_ramInPolynomialOverhead {f : List ℕ → List �
     H.inputAlphabet H.outputAlphabet x (f x) runningTime w hrun' hw'
   refine ⟨t, ht.trans ?_, ?_⟩
   · have hm := Nat.mul_le_mul_left layout.const hcost
-    simpa [timeOverhead, n, runningTime, q] using hm
+    simpa [timeOverhead, n, runningTime, q] using! hm
   · simpa [tm, inputStack, outputStack, separatorIn, zeroIn, oneIn,
       separatorOut, zeroOut, oneOut, initialStateCode, mainLabelCode,
       cmd, layout, growth, guardCost, coreCoeff, n, runningTime] using hram

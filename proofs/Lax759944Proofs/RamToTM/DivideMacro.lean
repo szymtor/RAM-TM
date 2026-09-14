@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.MultiplyMacro
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -221,6 +224,7 @@ theorem containsTrue_false_bitsValue_zero {bits : List Bool}
   simp [divMachine, divCleanCfg, divCfg, divStacks, DivControl.clearHeld,
     Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -231,8 +235,6 @@ theorem containsTrue_false_bitsValue_zero {bits : List Bool}
       some (divCleanCfg .restoreInspectedDivisor nz dividend [] remainder [] backup) := by
   simp [divMachine, divCleanCfg, divCfg, divStacks, DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_inspect_iterate (nz : Bool)
     (dividend divisor remainder backup : List Bool) :
@@ -257,6 +259,7 @@ theorem div_inspect_iterate (nz : Bool)
   simp [divMachine, divMoveIteration, divCleanCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -268,8 +271,6 @@ theorem div_inspect_iterate (nz : Bool)
   simp [divMachine, divMoveIteration, divCleanCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_restore_inspected_iterate (nz : Bool)
     (dividend divisor remainder quotient backup : List Bool) :
@@ -305,8 +306,6 @@ theorem div_restore_inspected_iterate (nz : Bool)
   simp [divMachine, divCleanCfg, divDoneCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem div_step_zero_cons (b : Bool)
     (dividend divisor remainder quotient : List Bool) :
@@ -317,6 +316,7 @@ theorem div_restore_inspected_iterate (nz : Bool)
   simp [divMachine, divCleanCfg, divCfg, divStacks, DivControl.clearHeld,
     Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -327,8 +327,6 @@ theorem div_restore_inspected_iterate (nz : Bool)
   simp [divMachine, divCleanCfg, divDoneCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_zero_iterate (dividend divisor remainder quotient : List Bool) :
     ((fun o : Option divMachine.Cfg => o.bind divMachine.step)^[dividend.length])
@@ -352,6 +350,7 @@ theorem div_zero_iterate (dividend divisor remainder quotient : List Bool) :
   simp [divMachine, divCleanCfg, divPhaseCfg, divCfg, divStacks,
     Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -366,6 +365,7 @@ theorem div_zero_iterate (dividend divisor remainder quotient : List Bool) :
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -379,8 +379,6 @@ theorem div_zero_iterate (dividend divisor remainder quotient : List Bool) :
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_shiftFirst_iterate (selected borrow : Bool)
     (dividend divisor remainder quotient divisorBackup remainderBackup
@@ -409,6 +407,7 @@ theorem div_shiftFirst_iterate (selected borrow : Bool)
   simp [divMachine, divPhaseCfg, divCfg, divStacks, DivControl.clearHeld,
     Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -422,6 +421,7 @@ theorem div_shiftFirst_iterate (selected borrow : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -435,8 +435,6 @@ theorem div_shiftFirst_iterate (selected borrow : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_shiftSecond_iterate (selected borrow : Bool)
     (dividend divisor remainder quotient divisorBackup remainderBackup
@@ -464,6 +462,7 @@ theorem div_shiftSecond_iterate (selected borrow : Bool)
         quotient divisorBackup remainderBackup differenceReverse []) := by
   simp [divMachine, divPhaseCfg, divCfg, divStacks, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -561,8 +560,7 @@ theorem div_shift_pipeline (b x : Bool)
         divisorBackup remainderBackup differenceReverse []) := by
   simp [divMachine, divSubCfg, divPhaseCfg, divCfg, divStacks]
   congr 2
-  funext k
-  cases k <;> rfl
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
 
 theorem div_subtract_iterate (selected borrow : Bool)
     (dividend divisor remainder quotient divisorBackup remainderBackup
@@ -601,6 +599,7 @@ theorem div_subtract_iterate (selected borrow : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -613,8 +612,6 @@ theorem div_subtract_iterate (selected borrow : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_restoreDivisor_iterate (selected borrow : Bool)
     (dividend divisor quotient divisorBackup remainderBackup differenceReverse :
@@ -658,6 +655,7 @@ theorem div_restoreDivisor_iterate (selected borrow : Bool)
   simp [divMachine, divDiscardIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -670,8 +668,6 @@ theorem div_restoreDivisor_iterate (selected borrow : Bool)
   simp [divMachine, divDiscardIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_discardDifference_iterate (selected : Bool)
     (dividend divisor quotient remainderBackup differenceReverse : List Bool) :
@@ -695,6 +691,7 @@ theorem div_discardDifference_iterate (selected : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -707,8 +704,6 @@ theorem div_discardDifference_iterate (selected : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_restoreRemainder_iterate (selected : Bool)
     (dividend divisor remainder quotient remainderBackup : List Bool) :
@@ -734,6 +729,7 @@ theorem div_restoreRemainder_iterate (selected : Bool)
   simp [divMachine, divDiscardIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -746,8 +742,6 @@ theorem div_restoreRemainder_iterate (selected : Bool)
   simp [divMachine, divDiscardIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_discardOldRemainder_iterate (selected : Bool)
     (dividend divisor quotient remainderBackup differenceReverse : List Bool) :
@@ -771,6 +765,7 @@ theorem div_discardOldRemainder_iterate (selected : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -783,8 +778,6 @@ theorem div_discardOldRemainder_iterate (selected : Bool)
   simp [divMachine, divMoveIteration, divPhaseCfg, divCfg, divStacks,
     DivControl.clearHeld]
   congr 2
-  funext k
-  cases k <;> rfl
 
 theorem div_restoreDifference_iterate (selected : Bool)
     (dividend divisor remainder quotient differenceReverse : List Bool) :
@@ -809,6 +802,7 @@ theorem div_restoreDifference_iterate (selected : Bool)
         ((!borrow) :: quotient) []) := by
   simp [divMachine, divPhaseCfg, divCleanCfg, divCfg, divStacks, Function.update]
   congr 2
+  simp [show (default : DivControl) = ⟨none, false, none, none, false, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -974,12 +968,12 @@ theorem div_subtract_pipeline (selected : Bool)
     | false =>
         have hdlen : candidate.reverse.length = difference.reverse.length := by
           simp [difference, subBits_length_of_eq false hlen]
-        simpa [hb] using div_finalize_false selected dividend divisor quotient
+        simpa [hb] using! div_finalize_false selected dividend divisor quotient
           candidate.reverse difference.reverse hdlen
     | true =>
         have hdlen : difference.reverse.length = candidate.reverse.length := by
           simp [difference, subBits_length_of_eq false hlen]
-        simpa [hb] using div_finalize_true selected dividend divisor quotient
+        simpa [hb] using! div_finalize_true selected dividend divisor quotient
           candidate.reverse difference.reverse hdlen
   have h := chain (chain (chain (chain hs hs0) hr) hr0) hp
   have htime :
@@ -1177,7 +1171,7 @@ theorem divMachine_zero_correct (w a : ℕ) :
   rw [htime] at h
   have hquot : (dividend.map fun _ => false).reverse = fixedBits w 0 := by
     simp [dividend, fixedBits_zero]
-  simpa [stepO, divInitialCfg, divCleanCfg, dividend, divisor, remainder, hquot] using h
+  simpa [stepO, divInitialCfg, divCleanCfg, dividend, divisor, remainder, hquot] using! h
 
 theorem divMachine_positive_correct (w a d : ℕ)
     (ha : a < 2 ^ w) (hd0 : 0 < d) (hd : d < 2 ^ w) :
@@ -1257,6 +1251,6 @@ theorem divMachine_positive_correct (w a d : ℕ)
           (bitsValue finalScan.quotient) := (fixedBits_bitsValue _).symm
       _ = fixedBits w (a / d) := by rw [hlen, hscan.1]
   rw [hscan.2, hquot] at h
-  simpa [stepO, divInitialCfg, divCleanCfg, dividend, divisor, remainder] using h
+  simpa [stepO, divInitialCfg, divCleanCfg, dividend, divisor, remainder] using! h
 
 end Lax759944Proofs.RamToTM

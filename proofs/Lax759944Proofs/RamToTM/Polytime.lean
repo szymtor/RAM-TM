@@ -3,6 +3,8 @@ import Lax759944Proofs.CellToMicrocode
 import Lax759944.RamPolytime
 import Lax759944.TuringPolytime
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Polynomial Lax759944Proofs.Microcode

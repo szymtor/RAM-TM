@@ -1,5 +1,8 @@
 import Mathlib.Computability.TuringMachine.ToPartrec
 
+-- Preserve Lean 4.30 definition unfolding during elaboration.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.Computability
 
 open Turing ToPartrec Encodable
@@ -26,7 +29,7 @@ theorem listPairCode_eval (a b : ℕ) :
     listPairCode.eval [a, b] = pure [Nat.pair a b] := by
   have h := Classical.choose_spec (Code.exists_code pairVector_partrec')
     (⟨[a, b], by simp⟩ : List.Vector ℕ 2)
-  simpa [listPairCode, pairVector] using h
+  simpa [listPairCode, pairVector] using! h
 
 private def unpairLeftVector (v : List.Vector ℕ 1) : ℕ :=
   (Nat.unpair v.head).1
@@ -45,7 +48,7 @@ theorem listUnpairLeftCode_eval (n : ℕ) :
     listUnpairLeftCode.eval [n] = pure [(Nat.unpair n).1] := by
   have h := Classical.choose_spec (Code.exists_code unpairLeftVector_partrec')
     (⟨[n], by simp⟩ : List.Vector ℕ 1)
-  simpa [listUnpairLeftCode, unpairLeftVector] using h
+  simpa [listUnpairLeftCode, unpairLeftVector] using! h
 
 private def unpairRightVector (v : List.Vector ℕ 1) : ℕ :=
   (Nat.unpair v.head).2
@@ -64,7 +67,7 @@ theorem listUnpairRightCode_eval (n : ℕ) :
     listUnpairRightCode.eval [n] = pure [(Nat.unpair n).2] := by
   have h := Classical.choose_spec (Code.exists_code unpairRightVector_partrec')
     (⟨[n], by simp⟩ : List.Vector ℕ 1)
-  simpa [listUnpairRightCode, unpairRightVector] using h
+  simpa [listUnpairRightCode, unpairRightVector] using! h
 
 private def codeOne : Code := .comp .succ .zero
 
@@ -244,7 +247,7 @@ theorem listConjugateCode_eval (f : List ℕ → List ℕ) (hf : Computable f)
     (⟨[encode xs], by simp⟩ : List.Vector ℕ 1)
   have h' : (listConjugateCode f hf).eval [encode xs] =
       pure [listConjugate f (encode xs)] := by
-    simpa [listConjugateCode] using h
+    simpa [listConjugateCode] using! h
   rw [h', listConjugate]
   simp
 

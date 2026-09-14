@@ -670,7 +670,6 @@ theorem bigStepBigStepBOfBitGrowth {c : Com} {σ σ' : Env} {k b G A : ℕ}
                 omega)) hcB
             exact ⟨.ite_true hbB hcB', by
               apply hs'.mono
-              dsimp [T]
               rw [Nat.add_mul]
               omega⟩
   | @ite_false cond c d σ0 σ1 k1 hb hd ih =>
@@ -703,7 +702,6 @@ theorem bigStepBigStepBOfBitGrowth {c : Com} {σ σ' : Env} {k b G A : ℕ}
                 omega)) hdB
             exact ⟨.ite_false hbB hdB', by
               apply hs'.mono
-              dsimp [T]
               rw [Nat.add_mul]
               omega⟩
   | @while_true cond c σ0 σ1 σ2 k1 k2 hb hc hw ihc ihw =>
@@ -739,7 +737,6 @@ theorem bigStepBigStepBOfBitGrowth {c : Com} {σ σ' : Env} {k b G A : ℕ}
           exact ⟨.while_true hbB hcB' hwB',
             by
               apply hs₂.mono
-              dsimp [T]
               simp only [Nat.add_mul, Nat.one_mul]
               omega⟩
   | @while_false cond c σ0 hb =>

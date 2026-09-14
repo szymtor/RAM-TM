@@ -55,7 +55,7 @@ theorem literalWord_spliced_correct {Kx Λx τ : Type}
   apply transport_haltingMacroCfg_and_return (literalWordProgram n) .done
     (by rfl) returnLabel right
   · simpa [literalWordProgram, literalWordMacroCfg, literalWordCfg,
-      literalWordMachine] using literalWord_correct_exact n query result
+      literalWordMachine] using! literalWord_correct_exact n query result
   rfl
 
 theorem lookupScan_found_spliced {Kx Λx τ : Type}
@@ -87,7 +87,7 @@ theorem lookupScan_found_spliced {Kx Λx τ : Type}
   apply transport_haltingMacroCfg_and_return lookupScanProgram .found
     (by rfl) returnLabel right
   · simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using hrun
+      lookupScanMachine] using! hrun
   rfl
 
 theorem lookupScan_missing_spliced {Kx Λx τ : Type}
@@ -115,7 +115,7 @@ theorem lookupScan_missing_spliced {Kx Λx τ : Type}
   apply transport_haltingMacroCfg_and_return lookupScanProgram .missing
     (by rfl) returnLabel right
   · simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using
+      lookupScanMachine] using!
       lookupScan_all_missing w query hq m hm hmissing equal processed
   rfl
 

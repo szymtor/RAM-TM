@@ -38,7 +38,7 @@ theorem sparseDivLocal_zero_correct (w a : ℕ) :
     cases l <;> rfl
   rw [hp]
   simpa [sparseDivLocalInitialCfg, sparseDivLocalDoneCfg, sparseDivInitialCfg,
-    sparseDivDoneCfg, divInitialCfg, divDoneCfg, divCfg, mapAlphabetCfg] using
+    sparseDivDoneCfg, divInitialCfg, divDoneCfg, divCfg, mapAlphabetCfg] using!
       sparseDiv_zero_correct w a
 
 theorem sparseDivLocal_positive_correct (w a d : ℕ)
@@ -53,7 +53,7 @@ theorem sparseDivLocal_positive_correct (w a d : ℕ)
     cases l <;> rfl
   rw [hp]
   simpa [sparseDivLocalInitialCfg, sparseDivLocalDoneCfg, sparseDivInitialCfg,
-    sparseDivDoneCfg, divInitialCfg, divDoneCfg, divCfg, mapAlphabetCfg] using
+    sparseDivDoneCfg, divInitialCfg, divDoneCfg, divCfg, mapAlphabetCfg] using!
       sparseDiv_positive_correct w a d ha hd0 hd
 
 theorem sparseDiv_core_zero_correct {Λx τ : Type} (w a : ℕ)

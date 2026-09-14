@@ -164,7 +164,7 @@ theorem literalWord_core_correct {Λx τ : Type} (n : ℕ)
   apply transport_renamedHaltingMacro_and_return literalWordCoreRenaming
     (literalWordProgram n) .done (by rfl) returnLabel right
   · simpa [literalWordProgram, literalWordMacroCfg, literalWordCfg,
-      literalWordMachine] using literalWord_correct_exact n query result
+      literalWordMachine] using! literalWord_correct_exact n query result
   · rfl
 
 theorem lookup_core_found {Λx τ : Type}
@@ -195,7 +195,7 @@ theorem lookup_core_found {Λx τ : Type}
   apply transport_renamedHaltingMacro_and_return lookupCoreRenaming
     lookupScanProgram .found (by rfl) returnLabel right
   · simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using hrun
+      lookupScanMachine] using! hrun
   · rfl
 
 theorem lookup_core_missing {Λx τ : Type}
@@ -222,7 +222,7 @@ theorem lookup_core_missing {Λx τ : Type}
   apply transport_renamedHaltingMacro_and_return lookupCoreRenaming
     lookupScanProgram .missing (by rfl) returnLabel right
   · simpa [lookupScanProgram, lookupScanMacroCfg, lookupScanCfg,
-      lookupScanMachine] using
+      lookupScanMachine] using!
       lookupScan_all_missing w query hq m hm hmissing equal processed
   · rfl
 

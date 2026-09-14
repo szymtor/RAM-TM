@@ -214,7 +214,7 @@ private theorem reaches_has_steps {α : Type} {step : α → Option α}
       obtain ⟨n, hn⟩ := ih
       refine ⟨1 + n, ?_⟩
       rw [Function.iterate_add_apply, hn]
-      simpa using hstep
+      simpa using! hstep
 
 private noncomputable def reaches_to_evalsTo_some {α : Type}
     {step : α → Option α} {a b : α}

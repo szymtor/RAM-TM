@@ -1,6 +1,9 @@
 import Lax759944Proofs.RamToTM.FixedWord
 import Mathlib.Tactic.DeriveFintype
 
+-- Preserve definition unfolding in generated Fintype instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -115,7 +118,6 @@ def addCarryOut : List Bool → List Bool → Bool → Bool
       ⟨carry, none, none⟩ (addStackFamily [] right result)) = _
   rw [stepAux_addIteration_nil]
   · rfl
-  · rfl
 
 @[simp] theorem addMachine_step_cons (carry a b : Bool)
     (as bs result : List Bool) :
@@ -226,9 +228,6 @@ def moveDoneCfg (target : List Bool) : moveMachine.Cfg where
     (moveIteration MoveStack.source MoveStack.target MoveLabel.loop MoveLabel.done)
     ⟨none⟩ (moveStacks [] target)) = _
   simp [moveIteration, moveDoneCfg, moveStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem moveMachine_step_cons (a : Bool) (as target : List Bool) :
     moveMachine.step (moveCfg (a :: as) target) = some (moveCfg as (a :: target)) := by
@@ -311,9 +310,6 @@ def zipDoneCfg (f : Bool → Bool → Bool) (result : List Bool) :
     (zipIteration f AddStack.left AddStack.right AddStack.result AddLabel.loop AddLabel.done)
     ⟨none, none⟩ (addStackFamily [] right result)) = _
   simp [zipIteration, zipPartialDoneCfg, addStackFamily]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem zipMachine_step_cons (f : Bool → Bool → Bool) (a b : Bool)
     (as bs result : List Bool) :

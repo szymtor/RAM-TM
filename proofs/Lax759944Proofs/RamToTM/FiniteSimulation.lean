@@ -1,5 +1,7 @@
 import Lax759944Proofs.RamToTM.FiniteDispatcher
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
@@ -73,7 +75,7 @@ theorem PreservesDispatch.lensRenameStmt
   intro state tapes
   induction q generalizing state tapes with
   | push k f q ih =>
-      simpa only [lensRenameStmt, TM2.stepAux] using
+      simpa only [lensRenameStmt, TM2.stepAux] using!
         ih state (Function.update tapes (stackMap.encode k)
           (f (lens.get state) :: tapes (stackMap.encode k)))
   | peek k f q ih =>
@@ -91,9 +93,9 @@ theorem PreservesDispatch.lensRenameStmt
         (hdisjoint state _)
   | branch f q₁ q₂ ih₁ ih₂ =>
       cases h : f (lens.get state)
-      · simpa only [Lax759944Proofs.RamToTM.lensRenameStmt, TM2.stepAux, h] using
+      · simpa only [Lax759944Proofs.RamToTM.lensRenameStmt, TM2.stepAux, h] using!
           ih₂ state tapes
-      · simpa only [Lax759944Proofs.RamToTM.lensRenameStmt, TM2.stepAux, h] using
+      · simpa only [Lax759944Proofs.RamToTM.lensRenameStmt, TM2.stepAux, h] using!
           ih₁ state tapes
   | goto f => rfl
   | halt => rfl
@@ -162,7 +164,7 @@ theorem ProgramPreservesDispatch.lensMultiPhaseLeft
         stackMap lens hdisjoint (program label)
   | some next =>
       intro state tapes
-      simpa only [TM2.stepAux] using hexit label state
+      simpa only [TM2.stepAux] using! hexit label state
 
 theorem haltProgram_preservesDispatch {N : Nat} {L : Type} :
     ProgramPreservesDispatch
@@ -1001,14 +1003,14 @@ theorem finite_load_to_fetch {p : Program} {N : Nat}
         lensRenamedCfg, FullInterpreterState.dispatchLens,
         FullInterpreterState.literalLens, FullInterpreterState.macroLens,
         InterpreterMacroState.dispatchLens, StateLens.comp]
-        using hpres
+        using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 theorem finite_load_instruction {p : Program} {N pc w : Nat}
     (hbound : programArgumentBound p <= N) (o : Op)
@@ -1038,7 +1040,7 @@ theorem finite_load_instruction {p : Program} {N pc w : Nat}
           (coreStacks w s))) =
       some (finiteInterpreterCfg
         (.control (.data (boundPC p pc) .load)) state (coreStacks w s)) := by
-    simpa using hfetchStep
+    simpa using! hfetchStep
   have hentryStep := finite_step_load_entry hbound (boundPC p pc) o
     (by simpa [fetch_boundPC] using hfetch) state (coreStacks w s)
   have hstartEq :
@@ -1129,14 +1131,14 @@ theorem finite_add_to_fetch {p : Program} {N : Nat}
       simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
         lensRenamedCfg, FullInterpreterState.dispatchLens,
         FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-        InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+        InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_add_instruction {p : Program} {N pc w : Nat}
@@ -1232,14 +1234,14 @@ theorem finite_bitwise_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 theorem finite_sub_to_fetch {p : Program} {N : Nat}
     (hbound : programArgumentBound p <= N) (pc : BoundedPC p)
@@ -1291,14 +1293,14 @@ theorem finite_sub_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 theorem finite_mul_to_fetch {p : Program} {N : Nat}
     (hbound : programArgumentBound p <= N) (pc : BoundedPC p)
@@ -1351,14 +1353,14 @@ theorem finite_mul_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 set_option maxHeartbeats 5000000 in
 theorem finite_div_to_fetch {p : Program} {N : Nat}
@@ -1411,7 +1413,7 @@ theorem finite_div_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
@@ -1419,7 +1421,7 @@ theorem finite_div_to_fetch {p : Program} {N : Nat}
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg,
       embedFullDivideReturnCfg]
-      using hglobal
+      using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_shiftLeft_to_fetch {p : Program} {N : Nat}
@@ -1475,14 +1477,14 @@ theorem finite_shiftLeft_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_shiftRight_to_fetch {p : Program} {N : Nat}
@@ -1538,14 +1540,14 @@ theorem finite_shiftRight_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, operandBoundaryBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_write_to_fetch {p : Program} {N : Nat}
@@ -1599,14 +1601,14 @@ theorem finite_write_to_fetch {p : Program} {N : Nat}
     cases o <;> simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   cases o <;>
     simpa [finalCfg, writeResultBase_coreStacks,
       Function.iterate_succ_apply, embedOperandReturnCfg,
       embedDirectReturnCfg, embedIndirectReturnCfg,
       embedIndirectTransferReturnCfg, embedDirectTailReturnCfg]
-      using hglobal
+      using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_store_to_fetch {p : Program} {N : Nat}
@@ -1662,11 +1664,11 @@ theorem finite_store_to_fetch {p : Program} {N : Nat}
     simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   simpa [finalCfg, operandBoundaryBase_coreStacks_withMemory,
     Function.iterate_succ_apply, embedOperandReturnCfg]
-    using hglobal
+    using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_storeInd_to_fetch {p : Program} {N : Nat}
@@ -1724,12 +1726,12 @@ theorem finite_storeInd_to_fetch {p : Program} {N : Nat}
     simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   simpa [finalCfg, operandBoundaryBase_coreStacks_withMemory,
     Function.iterate_succ_apply, embedOperandReturnCfg,
     embedDirectReturnCfg]
-    using hglobal
+    using! hglobal
 
 set_option maxHeartbeats 1000000 in
 theorem finite_read_to_fetch {p : Program} {N : Nat}
@@ -1846,14 +1848,14 @@ theorem finite_read_to_fetch {p : Program} {N : Nat}
     simpa [finalCfg, operandEvalStartCfg, literalOperandStartCfg,
       lensRenamedCfg, FullInterpreterState.dispatchLens,
       FullInterpreterState.literalLens, FullInterpreterState.macroLens,
-      InterpreterMacroState.dispatchLens, StateLens.comp] using hpres
+      InterpreterMacroState.dispatchLens, StateLens.comp] using! hpres
   refine ⟨steps + 1, by omega, finalState, hdispatch, ?_⟩
   convert hglobal using 1 <;>
     simp [finalCfg, Function.iterate_succ_apply, embedOperandReturnCfg, cleanReturnCfg,
       operandWordValue, sparseValue, Op.value, readResultStacks_coreStacks]
   exact congrArg
     (finiteInterpreterCfg (FiniteInterpreterLabel.fetch (nextPC p pc)) finalState)
-    (by simpa [List.map_reverse] using
+    (by simpa [List.map_reverse] using!
       (readResultStacks_coreStacks w address.val value s inputTail).symm)
 
 set_option maxHeartbeats 1000000 in
@@ -2272,7 +2274,7 @@ theorem finite_read_exhausted {p : Program} {N pc w address : Nat}
         (some localCfg) =
       some (finiteInterpreterCfg (.control .stopped) finalState finalTapes) := by
     simpa [localCfg, finalLocal, finalTapes, finiteEmbedCfg, mapLabelCfg,
-      encodeReadLabel, finiteInterpreterCfg] using hglobal
+      encodeReadLabel, finiteInterpreterCfg] using! hglobal
   have hall := finite_data_prefix hbound hfetch (by simp) (by simp)
     state (coreStacks w s) localCfg
     (finiteInterpreterCfg (.control .stopped) finalState finalTapes)
@@ -2647,15 +2649,7 @@ theorem finiteControl_step_of_some {p : Program} {N : Nat}
         generalize he : TM2.stepAux ((controlDispatchMachine p).m label)
           control tapes = e
         rcases e with ⟨elabel, econtrol, estacks⟩
-        have hembed := congrArg
-          (fun c => mapLabelCfg
-            (fun x : Sum (ControlDispatchLabel p) Empty => match x with
-              | Sum.inl l => finiteEmbedControlLabel (N := N) l
-              | Sum.inr e => nomatch e)
-            (lensRenamedCfg coreIdentityRenaming
-              FullInterpreterState.dispatchLens c ambient tapes)) he
         apply congrArg some
-        refine hembed.trans ?_
         have hestacks : renamedStacks coreIdentityRenaming estacks tapes = estacks := by
           funext k
           simp [renamedStacks, coreIdentityRenaming]
@@ -2674,13 +2668,13 @@ theorem finiteControl_step_of_some {p : Program} {N : Nat}
       | data pc kind =>
           have hdnone : d.l = none := by
             have := congrArg (fun x => x.l) (Option.some.inj hstep)
-            simpa [controlDispatchMachine, TM2.step] using this.symm
+            simpa [controlDispatchMachine, TM2.step] using! this.symm
           rw [hdnone] at hdlabel
           simp at hdlabel
       | stopped =>
           have hdnone : d.l = none := by
             have := congrArg (fun x => x.l) (Option.some.inj hstep)
-            simpa [controlDispatchMachine, TM2.step] using this.symm
+            simpa [controlDispatchMachine, TM2.step] using! this.symm
           rw [hdnone] at hdlabel
           simp at hdlabel
 
@@ -2825,7 +2819,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
             ⟨steps, hs, finalState, hdispatch, hrun⟩
           refine ⟨steps, hs.trans (readInstructionBound_le_finiteDataStepBound _ _),
             finalState, hdispatch, ?_⟩
-          simpa [hnext, coreStacks] using hrun
+          simpa [hnext, coreStacks] using! hrun
   | write o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2833,7 +2827,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (writeInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | load o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2841,7 +2835,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (loadInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, operandWordValue, coreStacks] using hrun
+      simpa [hnext, operandWordValue, coreStacks] using! hrun
   | store address =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2849,7 +2843,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (storeInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | storeInd address =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2857,7 +2851,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (storeIndInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | add o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2865,7 +2859,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (addInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | sub o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2873,7 +2867,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (subtractInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | mul o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2881,7 +2875,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (mulInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | div o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2889,7 +2883,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (divideInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [hnext, coreStacks] using hrun
+      simpa [hnext, coreStacks] using! hrun
   | and o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2897,7 +2891,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (zipInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using hrun
+      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using! hrun
   | or o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2905,7 +2899,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (zipInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using hrun
+      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using! hrun
   | xor o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2913,7 +2907,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (zipInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using hrun
+      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using! hrun
   | compl o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2921,7 +2915,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (zipInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using hrun
+      simpa [bitwiseInstr, BitwiseKind.natFn, hnext, coreStacks] using! hrun
   | shiftl o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2929,7 +2923,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (shiftInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [shiftInstr, shiftValue, hnext, coreStacks] using hrun
+      simpa [shiftInstr, shiftValue, hnext, coreStacks] using! hrun
   | shiftr o =>
       simp [sparseEffect] at heffect
       subst s'
@@ -2937,7 +2931,7 @@ theorem finite_data_effect {p : Program} {N w : Nat}
         ⟨steps, hs, finalState, hdispatch, hrun⟩
       refine ⟨steps, hs.trans (shiftInstructionBound_le_finiteDataStepBound _ _),
         finalState, hdispatch, ?_⟩
-      simpa [shiftInstr, shiftValue, hnext, coreStacks] using hrun
+      simpa [shiftInstr, shiftValue, hnext, coreStacks] using! hrun
   | jump _ | jzero _ | jgtz _ | halt => simp [isDataInstr] at hdata
 
 def finiteStepBound (w : Nat) (m : SparseMemory) : Nat :=

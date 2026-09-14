@@ -1,6 +1,8 @@
 import Lax759944Proofs.RamToTM.ShiftMacro
 import Lax759944Proofs.RamToTM.WordOperations
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -66,8 +68,10 @@ def shiftRightCfg (l : ShiftRightLabel) (source temp result : List Bool) :
     default (shiftStacks (a :: as) temp result)) = _
   simp [moveIteration, shiftRightCfg, shiftStacks, Function.update]
   congr 2
-  funext k
-  cases k <;> rfl
+  constructor
+  · rfl
+  · funext k
+    cases k <;> rfl
 
 @[simp] theorem shiftRight_step_first_nil (temp result : List Bool) :
     shiftRightMachine.step (shiftRightCfg .first [] temp result) =
@@ -77,9 +81,7 @@ def shiftRightCfg (l : ShiftRightLabel) (source temp result : List Bool) :
       ShiftRightLabel.second)
     default (shiftStacks [] temp result)) = _
   simp [moveIteration, shiftRightCfg, shiftStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
+  rfl
 
 @[simp] theorem shiftRight_step_second_cons (source result : List Bool)
     (a : Bool) (temp : List Bool) :
@@ -91,8 +93,10 @@ def shiftRightCfg (l : ShiftRightLabel) (source temp result : List Bool) :
     default (shiftStacks source (a :: temp) result)) = _
   simp [moveIteration, shiftRightCfg, shiftStacks, Function.update]
   congr 2
-  funext k
-  cases k <;> rfl
+  constructor
+  · rfl
+  · funext k
+    cases k <;> rfl
 
 @[simp] theorem shiftRight_step_second_nil (source result : List Bool) :
     shiftRightMachine.step (shiftRightCfg .second source [] result) =
@@ -102,9 +106,7 @@ def shiftRightCfg (l : ShiftRightLabel) (source temp result : List Bool) :
       ShiftRightLabel.done)
     default (shiftStacks source [] result)) = _
   simp [moveIteration, shiftRightCfg, shiftStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
+  rfl
 
 theorem shiftRight_first_iterate (source temp result : List Bool) :
     ((fun o : Option shiftRightMachine.Cfg =>
@@ -146,22 +148,22 @@ theorem shiftRightMachine_correct_nonempty (a : Bool) (as : List Bool) :
   have hd : (stepO^[1])
       (some (shiftRightCfg .discard (a :: as) [] [])) =
       some (shiftRightCfg .prepend as [] []) := by
-    simpa [stepO] using shiftRight_step_discard a as [] []
+    simpa [stepO] using! shiftRight_step_discard a as [] []
   have hp : (stepO^[1]) (some (shiftRightCfg .prepend as [] [])) =
       some (shiftRightCfg .first as [] [false]) := by
-    simpa [stepO] using shiftRight_step_prepend as [] []
+    simpa [stepO] using! shiftRight_step_prepend as [] []
   have hfirst := shiftRight_first_iterate as [] [false]
   simp only [List.append_nil] at hfirst
   have hf : (stepO^[1])
       (some (shiftRightCfg .first [] as.reverse [false])) =
       some (shiftRightCfg .second [] as.reverse [false]) := by
-    simpa [stepO] using shiftRight_step_first_nil as.reverse [false]
+    simpa [stepO] using! shiftRight_step_first_nil as.reverse [false]
   have hsecond := shiftRight_second_iterate [] as.reverse [false]
   simp only [List.reverse_reverse] at hsecond
   have hs : (stepO^[1])
       (some (shiftRightCfg .second [] [] (as ++ [false]))) =
       some (shiftRightCfg .done [] [] (as ++ [false])) := by
-    simpa [stepO] using shiftRight_step_second_nil [] (as ++ [false])
+    simpa [stepO] using! shiftRight_step_second_nil [] (as ++ [false])
   have hall := chain (chain (chain (chain (chain hd hp) hfirst) hf) hsecond) hs
   simp only [List.length_reverse] at hall
   have ht : 1 + 1 + as.length + 1 + as.length + 1 =

@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.InterpreterState
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
@@ -124,9 +127,6 @@ def controlRestoreCfg (p : Program) (pc target : BoundedPC p)
   simp [controlDispatchMachine, controlScanCfg, controlRestoreCfg,
     controlDispatchCfg, controlWorkTapes, DispatchControl.observe,
     DispatchControl.clearHeld]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 theorem control_scan_iterate (p : Program) (pc target : BoundedPC p)
     (jumpOnZero any : Bool) (bits : List Bool) (work : List SparseSymbol)
@@ -226,6 +226,7 @@ theorem containsTrue_fixedBits (w a : ℕ) (ha : a < 2 ^ w) :
   simp [controlDispatchMachine, controlBoundaryCfg, controlScanCfg,
     controlDispatchCfg, controlWorkTapes, encodeAccumulator, fetch_boundPC, hfetch]
   congr 2
+  simp [show (default : DispatchControl) = ⟨none, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -298,6 +299,7 @@ theorem control_jzero_correct {p : Program} {pc target w : ℕ} {s : SparseState
   simp [controlDispatchMachine, controlBoundaryCfg, controlScanCfg,
     controlDispatchCfg, controlWorkTapes, fetch_boundPC, hfetch]
   congr 2
+  simp [show (default : DispatchControl) = ⟨none, false⟩ from rfl]
   funext k
   cases k <;> rfl
 
@@ -368,7 +370,6 @@ theorem control_jgtz_correct {p : Program} {pc target w : ℕ} {s : SparseState}
         (controlDispatchCfg p (.fetch (boundPC p pc)) state tapes) =
       some (controlDispatchCfg p (.fetch (jumpPC p target)) state tapes) := by
   simp [controlDispatchMachine, controlDispatchCfg, fetch_boundPC, hfetch]
-  rfl
 
 theorem control_jump_correct {p : Program} {pc target w : ℕ} {s : SparseState}
     (hfetch : p[pc]? = some (.jump target)) :
@@ -384,7 +385,6 @@ theorem control_jump_correct {p : Program} {pc target w : ℕ} {s : SparseState}
       some (controlDispatchCfg p .stopped default (coreStacks w s)) := by
   simp [controlDispatchMachine, controlBoundaryCfg, controlDispatchCfg,
     fetch_boundPC, hfetch]
-  rfl
 
 @[simp] theorem control_step_missing_fetch {p : Program} {pc w : ℕ}
     {s : SparseState} (hfetch : p[pc]? = none) :
@@ -392,7 +392,6 @@ theorem control_jump_correct {p : Program} {pc target w : ℕ} {s : SparseState}
       some (controlDispatchCfg p .stopped default (coreStacks w s)) := by
   simp [controlDispatchMachine, controlBoundaryCfg, controlDispatchCfg,
     fetch_boundPC, hfetch]
-  rfl
 
 @[simp] theorem control_step_stopped (p : Program) (state : DispatchControl)
     (tapes : CoreStack → List SparseSymbol) :

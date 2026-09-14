@@ -33,7 +33,7 @@ theorem sparseAddLocal_correct (carry : Bool) (left right result : List Bool)
     cases l <;> rfl
   rw [hp]
   simpa [sparseAddLocalCfg, sparseAddLocalDoneCfg, sparseAddCfg,
-    sparseAddDoneCfg, addCfg, addDoneCfg, mapAlphabetCfg] using
+    sparseAddDoneCfg, addCfg, addDoneCfg, mapAlphabetCfg] using!
       sparseAdd_reaches_done carry left right result hlen
 
 def sparseZipCoreProgram (f : Bool → Bool → Bool) : AddLabel →
@@ -66,7 +66,7 @@ theorem sparseZipLocal_correct (f : Bool → Bool → Bool)
   rw [hp]
   simpa [sparseZipLocalCfg, sparseZipLocalDoneCfg, sparseZipCfg,
     sparseZipDoneCfg, zipCfg, zipDoneCfg, zipPartialDoneCfg,
-    mapAlphabetCfg] using
+    mapAlphabetCfg] using!
       sparseZip_reaches_done f left right result hlen
 
 def sparseSubCoreProgram : AddLabel →
@@ -98,7 +98,7 @@ theorem sparseSubLocal_fixed_correct (w : ℕ) {a b : ℕ}
   rw [hp]
   simpa [sparseSubLocalCfg, sparseSubLocalDoneCfg, sparseSubCfg,
     sparseSubDoneCfg, subCfg, subDoneCfg, subPartialDoneCfg,
-    mapAlphabetCfg] using sparseSub_fixed_correct w ha hb hba
+    mapAlphabetCfg] using! sparseSub_fixed_correct w ha hb hba
 
 theorem sparseAdd_core_correct {Λx τ : Type}
     (carry : Bool) (left rightBits result : List Bool)

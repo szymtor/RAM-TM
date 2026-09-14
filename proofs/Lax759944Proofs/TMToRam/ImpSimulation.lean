@@ -1,5 +1,6 @@
 import Lax759944Proofs.TMToRam.ImpCompiler
 import Lax865980Proofs.Frame
+import Std.Data.String.ToNat
 import Lax759944Proofs.TMToRam.Simulation
 
 /-!
@@ -15,11 +16,11 @@ open Lax865980Proofs.Imp
 
 theorem stackName_injective : Function.Injective stackName := by
   intro j k h
-  simpa [stackName, toString] using h
+  exact Nat.repr_injective (by simpa [stackName, toString] using h)
 
 theorem topName_injective : Function.Injective topName := by
   intro j k h
-  simpa [topName, toString] using h
+  exact Nat.repr_injective (by simpa [topName, toString] using h)
 
 theorem stateVar_ne_topName (k : ℕ) : stateVar ≠ topName k := by
   intro h
@@ -237,8 +238,8 @@ theorem NumericRep.setTemp (σ : Env) (capacity : ℕ → ℕ)
     NumericRep (σ.setVar tempVar v) capacity c := by
   rcases h with ⟨hs, hl, hst⟩
   refine ⟨?_, ?_, fun k => ?_⟩
-  · simpa [Env.setVar, tempVar_ne_stateVar] using hs
-  · simpa [Env.setVar, tempVar_ne_labelVar] using hl
+  · simpa [Env.setVar, tempVar_ne_stateVar] using! hs
+  · simpa [Env.setVar, tempVar_ne_labelVar] using! hl
   · exact (hst k).setVar_of_ne (fun he => tempVar_ne_topName k he.symm)
 
 theorem NumericRep.setHead (σ : Env) (capacity : ℕ → ℕ)
@@ -246,8 +247,8 @@ theorem NumericRep.setHead (σ : Env) (capacity : ℕ → ℕ)
     NumericRep (σ.setVar headVar v) capacity c := by
   rcases h with ⟨hs, hl, hst⟩
   refine ⟨?_, ?_, fun k => ?_⟩
-  · simpa [Env.setVar, headVar_ne_stateVar] using hs
-  · simpa [Env.setVar, headVar_ne_labelVar] using hl
+  · simpa [Env.setVar, headVar_ne_stateVar] using! hs
+  · simpa [Env.setVar, headVar_ne_labelVar] using! hl
   · exact (hst k).setVar_of_ne (fun he => headVar_ne_topName k he.symm)
 
 theorem NumericRep.setIndex (σ : Env) (capacity : ℕ → ℕ)
@@ -255,8 +256,8 @@ theorem NumericRep.setIndex (σ : Env) (capacity : ℕ → ℕ)
     NumericRep (σ.setVar indexVar v) capacity c := by
   rcases h with ⟨hs, hl, hst⟩
   refine ⟨?_, ?_, fun k => ?_⟩
-  · simpa [Env.setVar, indexVar_ne_stateVar] using hs
-  · simpa [Env.setVar, indexVar_ne_labelVar] using hl
+  · simpa [Env.setVar, indexVar_ne_stateVar] using! hs
+  · simpa [Env.setVar, indexVar_ne_labelVar] using! hl
   · exact (hst k).setVar_of_ne (fun he => indexVar_ne_topName k he.symm)
 
 theorem NumericRep.setState (σ : Env) (capacity : ℕ → ℕ)

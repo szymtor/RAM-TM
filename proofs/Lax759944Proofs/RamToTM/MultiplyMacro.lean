@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.AlphabetEmbedding
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -116,8 +119,6 @@ def mulDoneCfg (multiplicand accumulator : List Bool) : mulMachine.Cfg where
       some (mulDoneCfg multiplicand accumulator) := by
   simp [mulMachine, mulOuterCfg, mulDoneCfg, mulStacks]
   congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem mul_step_outer_cons (b : Bool)
     (bits multiplicand accumulator : List Bool) :
@@ -125,22 +126,22 @@ def mulDoneCfg (multiplicand accumulator : List Bool) : mulMachine.Cfg where
       some (mulCfg .select b false bits multiplicand accumulator [] [] []) := by
   simp [mulMachine, mulOuterCfg, mulCfg, mulStacks, Function.update]
   congr 2
-  funext k
-  cases k <;> rfl
+  constructor
+  · exact ⟨rfl, rfl, rfl, rfl⟩
+  · funext k
+    cases k <;> rfl
 
 @[simp] theorem mul_step_select_false (bits multiplicand accumulator : List Bool) :
     mulMachine.step
         (mulCfg .select false false bits multiplicand accumulator [] [] []) =
       some (mulCfg .shiftFirst false false bits multiplicand accumulator [] [] []) := by
   simp [mulMachine, mulCfg, mulStacks]
-  rfl
 
 @[simp] theorem mul_step_select_true (bits multiplicand accumulator : List Bool) :
     mulMachine.step
         (mulCfg .select true false bits multiplicand accumulator [] [] []) =
       some (mulCfg .add true false bits multiplicand accumulator [] [] []) := by
   simp [mulMachine, mulCfg, mulStacks]
-  rfl
 
 @[simp] theorem mul_step_add_cons (selected carry x a : Bool)
     (bits xs as backup result temp : List Bool) :
@@ -160,9 +161,6 @@ def mulDoneCfg (multiplicand accumulator : List Bool) : mulMachine.Cfg where
         (mulCfg .add selected carry bits [] [] backup result temp) =
       some (mulCfg .restoreMultiplicand selected carry bits [] [] backup result temp) := by
   simp [mulMachine, mulCfg, mulStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 theorem mul_add_iterate (selected carry : Bool)
     (bits left right backup result temp : List Bool)
@@ -205,9 +203,6 @@ theorem mul_add_iterate (selected carry : Bool)
       [] result temp) =
     some (mulCfg .restoreSum selected carry bits target accumulator [] result temp) := by
   simp [mulMachine, mulMoveIteration, MulControl.clearHeld, mulCfg, mulStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem mul_step_restoreSum_cons (selected carry a : Bool)
     (bits multiplicand accumulator backup source temp : List Bool) :
@@ -228,9 +223,6 @@ theorem mul_add_iterate (selected carry : Bool)
     some (mulCfg .shiftFirst selected carry bits multiplicand accumulator
       backup [] temp) := by
   simp [mulMachine, mulMoveIteration, MulControl.clearHeld, mulCfg, mulStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem mul_step_shiftFirst_cons (selected carry a : Bool)
     (bits source accumulator backup result temp : List Bool) :
@@ -250,9 +242,6 @@ theorem mul_add_iterate (selected carry : Bool)
       backup result temp) =
     some (mulCfg .shiftDiscard selected carry bits [] accumulator backup result temp) := by
   simp [mulMachine, mulMoveIteration, MulControl.clearHeld, mulCfg, mulStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem mul_step_shiftDiscard_cons (selected carry a : Bool)
     (bits accumulator backup result temp : List Bool) :
@@ -283,9 +272,6 @@ theorem mul_add_iterate (selected carry : Bool)
     some (mulCfg .shiftPrepend selected carry bits multiplicand accumulator
       backup result []) := by
   simp [mulMachine, mulMoveIteration, MulControl.clearHeld, mulCfg, mulStacks]
-  congr 2
-  funext k
-  cases k <;> rfl
 
 @[simp] theorem mul_step_shiftPrepend (selected carry : Bool)
     (bits multiplicand accumulator : List Bool) :

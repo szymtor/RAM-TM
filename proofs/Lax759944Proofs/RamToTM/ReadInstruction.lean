@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.StoreInstruction
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
@@ -441,6 +444,6 @@ theorem readInstruction_exhausted {N : Nat} {R : Type}
     hoperand hlift
   refine ⟨operandSteps + 2, by omega,
     FullInterpreterState.moveLens.put operandState default, ?_⟩
-  simpa [readInstructionProgram] using hchain
+  simpa [readInstructionProgram] using! hchain
 
 end Lax759944Proofs.RamToTM

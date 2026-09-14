@@ -121,7 +121,7 @@ theorem turingPolytime_to_ramPolytime {f : List ℕ → List ℕ}
     refine ⟨t, ?_, ?_⟩
     · apply ht.trans
       have hm := Nat.mul_le_mul_left layout.const hcost
-      simpa [ramTimePoly, n] using hm
+      simpa [ramTimePoly, n] using! hm
     · simpa [tm, inputStack, outputStack, separatorIn, zeroIn, oneIn,
         separatorOut, zeroOut, oneOut, initialStateCode, mainLabelCode,
         cmd, layout, growth, guardCost, coreCoeff, n] using hram

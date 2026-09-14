@@ -206,7 +206,7 @@ theorem encodeBitsBody_correct (zeroCode oneCode : ℕ) (σ : Env)
     simp [Expr.eval, σ₁, σ₂, bit, half, n, inputValueVar,
       inputHalfVar, inputBitVar]
   have hroom₂ : σ₂.vars encodedLengthVar < (σ₂.arrs scratchName).length := by
-    simpa [σ₂, σ₁, Env.setVar] using hroom
+    simpa [σ₂, σ₁, Env.setVar] using! hroom
   have happendZero : BigStep (appendScratch (.lit zeroCode)) σ₂
       (appendScratchState σ₂ zeroCode) 8 := by
     simpa using appendScratch_correct σ₂ (.lit zeroCode) zeroCode rfl hroom₂
@@ -687,7 +687,7 @@ theorem encodeInputBody_correct (separatorCode zeroCode oneCode : ℕ)
       appendScratchState_prefix σ₁ separatorCode written
         hindex₁
         (by simpa [σ₁] using hprefix)
-        (by simpa [σ₁, hindex] using hroom)
+        (by simpa [σ₁, hindex] using! hroom)
   have hspace₂ : written₂.length + (σ₂.vars inputValueVar).bits.length ≤
       (σ₂.arrs scratchName).length := by
     have hv : σ₂.vars inputValueVar = a := by
@@ -1194,7 +1194,7 @@ theorem compileInputCodec_correct (inputStack separatorCode zeroCode oneCode
         reverseScratchBody, seqs, Com.reads]
   · simp [σ₄, σ₃, Env.setVar, stateVar, labelVar]
   · simp [σ₄, Env.setVar]
-  · simpa [σ₄, σ₃, codes] using hreverseTop
+  · simpa [σ₄, σ₃, codes] using! hreverseTop
   · simpa [σ₄, σ₃, codes] using hreversePrefix
 
 /-- Consume one logical output symbol.  Separators flush the preceding number

@@ -1,5 +1,8 @@
 import Lax759944Proofs.RamToTM.WrapperEmbedding
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
@@ -455,7 +458,7 @@ theorem output_word_run {N w n : Nat} (h : n < 2 ^ w)
           (outputAdapterProgram (N := N) (L := Empty))))) hbits hdelimiter
   rw [show 3 * w + 3 = 3 * (fixedBits w n).reverse.length + 3 by simp]
   simpa [middleState, hscan, encodeNat, canonicalBitSymbol,
-    List.map_map, Function.comp_def, List.append_assoc] using hchain
+    List.map_map, Function.comp_def, List.append_assoc] using! hchain
 
 theorem output_finish_run {N : Nat} (state : WrapperState N)
     (active : Bool) (output : List Symbol)
@@ -508,7 +511,7 @@ theorem output_final_word_run {N w n : Nat} (h : n < 2 ^ w)
   have hscan := scanOutputBits_fixedBits h output
   rw [show 3 * w + 3 = 3 * (fixedBits w n).reverse.length + 3 by simp]
   simpa [middleState, hscan, encodeNat, canonicalBitSymbol,
-    List.map_map, Function.comp_def, List.append_assoc] using hchain
+    List.map_map, Function.comp_def, List.append_assoc] using! hchain
 
 def cleanupSuccessor (stack : CleanupStack) : OutputAdapterLabel :=
   match nextCleanupStack stack with
@@ -582,7 +585,7 @@ theorem encodeOutputStack_eq_payload (w : Nat) : ∀ ys : List Nat,
   | append_singleton ys y ih =>
       simp [encodeOutputStack, encodeWordList, encodeFixedWord,
         outputScanPayload, List.map_reverse, List.append_assoc]
-      simpa [encodeWordList] using ih
+      simpa [encodeWordList] using! ih
 
 theorem output_words_run {N w : Nat} (state : WrapperState N)
     (words : List Nat) (hne : words ≠ [])
@@ -632,7 +635,7 @@ theorem output_words_run {N w : Nat} (state : WrapperState N)
             simp
             ring
           rw [hcost]
-          simpa [outputScanPayload, encode, List.append_assoc] using hchain
+          simpa [outputScanPayload, encode, List.append_assoc] using! hchain
 
 theorem output_initialize_step {N : Nat} (state : WrapperState N)
     (tapes : (k : WrapperStack) -> List (WrapperAlphabet k)) :

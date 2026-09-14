@@ -1,6 +1,9 @@
 import Lax759944Proofs.RamToTM.OutputAdapter
 import Lax759944.RamPolytime
 
+-- Preserve Lean 4.30 elaboration for derived finite instances.
+set_option backward.isDefEq.respectTransparency false
+
 namespace Lax759944Proofs.RamToTM
 
 open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
@@ -165,7 +168,6 @@ def inputScanStacks (input : List Symbol) (seen : List Symbol)
     inputScanStacks input seen base (.core .work0) =
       seen.reverse.map sparseOfInputSymbol := by
   simp [inputScanStacks]
-  rfl
 
 @[simp] theorem inputScanStacks_work1 (input seen base) :
     inputScanStacks input seen base (.core .work1) =
@@ -267,7 +269,6 @@ theorem input_scan_finish {N : Nat} (seen : List Symbol)
       (inputScanStacks [] seen base)) := by
   simp [inputScanMachine, inputScanCfg, inputScanProgram, liftCoreProgram,
     Turing.TM2.step, Turing.TM2.stepAux, List.head?, List.tail, Option.isNone]
-  constructor <;> rfl
 
 theorem input_scan_all {N : Nat} (input : List Symbol)
     (state : WrapperState N)
