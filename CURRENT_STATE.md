@@ -1,3 +1,26 @@
+# Registered final submission — lax-759944
+
+Updated 2026-09-16. The user authorized final publication of the six current
+Lean 4.33 submissions and normalization of AI author credits to GPT, retaining
+version numbers. This supersedes earlier keep-draft restrictions for this release.
+
+- Registered and citable: https://laxarchive.org/lax-759944/
+- Frozen source: `134e398cef46599371df99f10c9007bc34ba3868` on `lean-4.33`.
+- The release changes only `manifest.yaml` relative to the previous accepted
+  Archive source; Lean sources and the previously replayed proofs are unchanged.
+- Fresh full local Lax compilation and statement inspection passed. The Archive
+  independently verified the author-only diff and reused its validated capture.
+- After registration, the refreshed Archive record was verified against the
+  exact source and capture provenance, GPT author credits, all concept source
+  text, proof counts and complete proof closure, and registered dependency pins.
+- Evidence: `../migration-tools/finalize-foundations-verification.log` and
+  the corresponding `finalize-*-build.log`, `-submit.log`, and `-register.log`.
+
+No further publication is needed. Downstream submissions must pin the frozen
+source above. Local status documentation may advance after that immutable commit.
+
+## Earlier history
+
 # RAM model correction (validated, 2026-09-16)
 
 Public concepts now use registered Lax808846 at
