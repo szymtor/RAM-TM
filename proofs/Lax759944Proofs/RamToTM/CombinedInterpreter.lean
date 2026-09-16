@@ -7,7 +7,7 @@ set_option backward.isDefEq.respectTransparency false
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Lax759944Proofs.Microcode
-open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
+open Lax759944.BinaryWordEncoding Lax759944Proofs.Legacy.RamPolytime
 
 noncomputable section
 
@@ -402,7 +402,7 @@ theorem middle_cleanupCost_le {p : Program} {N w steps : Nat}
 set_option maxHeartbeats 3000000 in
 theorem combined_runsTo_complete (p : Program) (wordBound : Polynomial Nat)
     (x output : List Nat) (t : Nat)
-    (hfits : Lax759944.RamPolytime.FitsInWords
+    (hfits : Lax759944Proofs.Legacy.RamPolytime.FitsInWords
       (wordBound.eval (bitSize x)) ((x.length :: x) ++ output))
     (hram : RunsTo (simulationWordWidth wordBound x) p
       (x.length :: x) output t) :

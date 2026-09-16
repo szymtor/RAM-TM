@@ -1,4 +1,4 @@
-import Lax865980.Ram
+import Lax808846.Ram
 import Mathlib.Computability.TuringMachine.ToPartrec
 
 /-!
@@ -32,7 +32,7 @@ overhead.
 
 namespace Lax759944.TuringRamEquivalence
 
-open Lax865980.Ram
+open Lax808846.Ram
 
 /-- A total function on finite words is computable by a word RAM if one
 uniform program computes it from the length-prefixed physical input

@@ -8,7 +8,7 @@ word encoding used by the simulated finite Turing machine.
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 theorem BigStep.arr_length_eq {c : Com} {σ σ' : Env} {cost : ℕ}
     (hrun : BigStep c σ σ' cost) (name : String) :

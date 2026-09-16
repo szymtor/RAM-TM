@@ -1,9 +1,9 @@
 import Lax759944Proofs.TMToRam.CanonicalLayout
-import Lax865980Proofs.Bounds
+import Lax759944Proofs.Legacy.Bounds
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 /-- A successful bounded expression evaluation remains successful when the
 exclusive value bound is increased. -/

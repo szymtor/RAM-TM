@@ -1,12 +1,14 @@
-import Lax759944.TuringRamEquivalence
+import Lax759944Proofs.Legacy.TuringRamEquivalence
 import Lax759944Proofs.Computability.RamEvaluator
 import Lax759944Proofs.Computability.PartrecRuntimeSearch
 import Lax759944Proofs.Computability.ToPartrecList
 import Lax759944Proofs.Computability.PartrecToRam
+import Lax759944Proofs.Computability.TapeRamComputable
+import Lax759944Proofs.LegacyRamClasses
 
 namespace Lax759944Proofs.Computability
 
-open Lax865980.Ram
+open Lax759944Proofs.Legacy.Ram
 open Lax759944.BinaryWordEncoding
 open PartrecNativeCodec
 
@@ -32,7 +34,7 @@ theorem polynomial_eval_primrec (p : Polynomial ℕ) : Primrec p.eval := by
 
 theorem computable_to_ramComputable {f : List ℕ → List ℕ}
     (hf : Computable f) :
-    Lax759944.TuringRamEquivalence.RamComputable f := by
+    Lax759944Proofs.Legacy.TuringRamEquivalence.RamComputable f := by
   let c := computableListCode f hf
   have heval : ∀ x, c.eval (x.length :: x) = pure (f x) := by
     intro x
@@ -58,17 +60,28 @@ end Lax759944Proofs.Computability
 
 namespace Lax759944Proofs.TuringRamEquivalence
 
-open Lax759944.TuringRamEquivalence
+open Lax759944Proofs.Legacy.TuringRamEquivalence
+
+/-- Historical equivalence, retained as an internal simulation helper. -/
+theorem legacyRamComputable_iff_computable (f : List ℕ → List ℕ) :
+    RamComputable f ↔ Computable f := by
+  constructor
+  · exact Lax759944Proofs.Computability.ramComputable_to_computable
+  · exact Lax759944Proofs.Computability.computable_to_ramComputable
 
 /--
 ---
 conclusion: Lax759944.TuringRamEquivalence.ramComputable_iff_computable
 ---
-**Equivalence of Turing machines and word RAMs.** -/
+The direct evaluator handles every instruction of the current RAM. In the
+other direction, the existing compiler is connected by a checked embedding.
+-/
 theorem ramComputable_iff_computable (f : List ℕ → List ℕ) :
-    RamComputable f ↔ Computable f := by
+    Lax759944.TuringRamEquivalence.RamComputable f ↔ Computable f := by
   constructor
-  · exact Lax759944Proofs.Computability.ramComputable_to_computable
-  · exact Lax759944Proofs.Computability.computable_to_ramComputable
+  · exact Lax759944Proofs.Computability.TapeRam.ramComputable_to_computable
+  · intro hf
+    exact LegacyRamClasses.computable_forward
+      (Lax759944Proofs.Computability.computable_to_ramComputable hf)
 
 end Lax759944Proofs.TuringRamEquivalence

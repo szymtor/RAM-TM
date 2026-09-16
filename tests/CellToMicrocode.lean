@@ -3,29 +3,29 @@ import Lax759944Proofs.CellToMicrocode
 open Lax759944Proofs
 
 -- Reading, fixed-width complement, writing, and halting.
-private def complementProgram : Lax865980.Ram.Program :=
+private def complementProgram : Lax759944Proofs.Legacy.Ram.Program :=
   [.read 0, .not 1 0, .write 1, .halt]
 
-#guard (Lax865980.Ram.run 3 complementProgram 3
-  (Lax865980.Ram.initState [5])).map Lax865980.Ram.State.out == some [2]
+#guard (Lax759944Proofs.Legacy.Ram.run 3 complementProgram 3
+  (Lax759944Proofs.Legacy.Ram.initState [5])).map Lax759944Proofs.Legacy.Ram.State.out == some [2]
 #guard (Microcode.run 3 (CellToMicrocode.compile complementProgram) 9
   (Microcode.initState [5])).map Microcode.State.out == some [2]
 
 -- At width zero every address aliases and every produced word is zero.
-#guard (Lax865980.Ram.run 0 complementProgram 3
-  (Lax865980.Ram.initState [5])).map Lax865980.Ram.State.out == some [0]
+#guard (Lax759944Proofs.Legacy.Ram.run 0 complementProgram 3
+  (Lax759944Proofs.Legacy.Ram.initState [5])).map Lax759944Proofs.Legacy.Ram.State.out == some [0]
 #guard (Microcode.run 0 (CellToMicrocode.compile complementProgram) 9
   (Microcode.initState [5])).map Microcode.State.out == some [0]
 
 -- Exhausted reads and missing instructions halt immediately in both models.
-#guard (Lax865980.Ram.step 3 complementProgram (Lax865980.Ram.initState [])).isNone
+#guard (Lax759944Proofs.Legacy.Ram.step 3 complementProgram (Lax759944Proofs.Legacy.Ram.initState [])).isNone
 #guard (Microcode.step 3 (CellToMicrocode.compile complementProgram)
   (Microcode.initState [])).isNone
-#guard (Lax865980.Ram.step 3 [] (Lax865980.Ram.initState [5])).isNone
+#guard (Lax759944Proofs.Legacy.Ram.step 3 [] (Lax759944Proofs.Legacy.Ram.initState [5])).isNone
 #guard (Microcode.step 3 (CellToMicrocode.compile []) (Microcode.initState [5])).isNone
 
 -- Both outcomes of a conditional jump must land at a block boundary.
-private def branchProgram : Lax865980.Ram.Program :=
+private def branchProgram : Lax759944Proofs.Legacy.Ram.Program :=
   [.read 0, .jzero 0 4, .set 1 7, .jump 5, .set 1 3, .write 1, .halt]
 
 #guard (Microcode.run 4 (CellToMicrocode.compile branchProgram) 12
@@ -34,18 +34,18 @@ private def branchProgram : Lax865980.Ram.Program :=
   (Microcode.initState [1])).map Microcode.State.out == some [7]
 
 -- Oversized addresses and literals are normalized by the public model.
-private def aliasProgram : Lax865980.Ram.Program :=
+private def aliasProgram : Lax759944Proofs.Legacy.Ram.Program :=
   [.set 8 13, .not 0 8, .write 8, .halt]
 
-#guard (Lax865980.Ram.run 3 aliasProgram 3
-  (Lax865980.Ram.initState [])).map Lax865980.Ram.State.out == some [2]
+#guard (Lax759944Proofs.Legacy.Ram.run 3 aliasProgram 3
+  (Lax759944Proofs.Legacy.Ram.initState [])).map Lax759944Proofs.Legacy.Ram.State.out == some [2]
 #guard (Microcode.run 3 (CellToMicrocode.compile aliasProgram) 9
   (Microcode.initState [])).map Microcode.State.out == some [2]
 
 -- This theorem quantifies over all instructions, all widths (including zero),
 -- arbitrary input words, and every finite halting execution.
-example {w t : Nat} {p : Lax865980.Ram.Program} {input output : List Nat}
-    (h : Lax865980.Ram.RunsTo w p input output t) :
+example {w t : Nat} {p : Lax759944Proofs.Legacy.Ram.Program} {input output : List Nat}
+    (h : Lax759944Proofs.Legacy.Ram.RunsTo w p input output t) :
     Microcode.RunsTo w (CellToMicrocode.compile p) input output (3 * t) :=
   CellToMicrocode.runsTo h
 

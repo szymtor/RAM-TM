@@ -4,7 +4,7 @@ import Lax759944Proofs.TMToRam.NativeMachine
 namespace Lax759944Proofs.Computability.PartrecNativeCodec
 
 open Computability Turing Turing.PartrecToTM2
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 open Lax759944Proofs.TMToRam
 
 def bitSymbol : Bool → Γ'

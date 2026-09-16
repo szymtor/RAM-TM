@@ -1,4 +1,4 @@
-import Lax759944.TuringRamEquivalence
+import Lax759944Proofs.Legacy.TuringRamEquivalence
 import Lax759944Proofs.CellToMicrocode
 import Lax759944Proofs.Computability.RamCandidateBasic
 
@@ -100,7 +100,7 @@ theorem runsTo_output_unique {w : ℕ} {p : Program} {input y z : List ℕ}
   exact hoy.symm.trans hoz
 
 theorem ramComputable_to_computable {f : List ℕ → List ℕ}
-    (hf : Lax759944.TuringRamEquivalence.RamComputable f) : Computable f := by
+    (hf : Lax759944Proofs.Legacy.TuringRamEquivalence.RamComputable f) : Computable f := by
   rcases CellToMicrocode.computable hf with ⟨p, threshold, hthreshold, hram⟩
   have hcand := ramCandidate_computable₂ p threshold hthreshold
   have hsearch : Partrec fun x : List ℕ =>

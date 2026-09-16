@@ -6,7 +6,7 @@ set_option backward.isDefEq.respectTransparency false
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
-open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
+open Lax759944.BinaryWordEncoding Lax759944Proofs.Legacy.RamPolytime
 
 inductive PhysicalRawStack | saved | raw | length | temp
   deriving DecidableEq, Fintype, Inhabited

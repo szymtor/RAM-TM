@@ -7,7 +7,7 @@ namespace Lax759944Proofs.RamToTM
 
 open Turing TM2
 open Polynomial
-open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
+open Lax759944.BinaryWordEncoding Lax759944Proofs.Legacy.RamPolytime
 
 noncomputable section
 

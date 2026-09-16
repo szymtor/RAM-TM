@@ -13,17 +13,13 @@ rev = "db584cd6d46c92f209a44c0f1c829460d327499d"
 name = "Lax759944"
 path = "../concepts"
 
-[[require]]
-name = "Lax865980"
-git = "https://github.com/lax-archive/lax-submissions"
-rev = "0aa87e1f6e6add4abe4f4e0aff8fe4a28950b2ea"
-subDir = "word-ram-v4-33/concepts"
 
-[[require]]
-name = "Lax865980Proofs"
-git = "https://github.com/lax-archive/lax-submissions"
-rev = "0aa87e1f6e6add4abe4f4e0aff8fe4a28950b2ea"
-subDir = "word-ram-v4-33/proofs"
 
 [[lean_lib]]
 name = "Lax759944Proofs"
+
+[[require]]
+name = "Lax808846"
+git = "https://github.com/lax-archive/lax-submissions"
+rev = "9394e531cc51cb67a0214bca3f9264dfe97ba5c7"
+subDir = "word-ram/concepts"

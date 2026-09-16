@@ -1,6 +1,6 @@
 import Lax759944Proofs.RamToTM.CombinedInterpreter
 import Lax759944Proofs.CellToMicrocode
-import Lax759944.RamPolytime
+import Lax759944Proofs.Legacy.RamPolytime
 import Lax759944.TuringPolytime
 
 set_option backward.isDefEq.respectTransparency false
@@ -8,7 +8,7 @@ set_option backward.isDefEq.respectTransparency false
 namespace Lax759944Proofs.RamToTM
 
 open Turing TM2 Polynomial Lax759944Proofs.Microcode
-open Lax759944.BinaryWordEncoding Lax759944.RamPolytime Lax759944.TuringPolytime
+open Lax759944.BinaryWordEncoding Lax759944Proofs.Legacy.RamPolytime Lax759944.TuringPolytime
 
 noncomputable section
 

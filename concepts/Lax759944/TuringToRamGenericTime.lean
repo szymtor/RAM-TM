@@ -1,4 +1,4 @@
-import Lax865980.Ram
+import Lax808846.Ram
 import Lax759944.BinaryWordEncoding
 import Mathlib.Algebra.Polynomial.Eval.Defs
 import Mathlib.Computability.TuringMachine.Computable
@@ -23,7 +23,7 @@ the supplied bound.
 
 namespace Lax759944.TuringToRamGenericTime
 
-open Lax865980.Ram
+open Lax808846.Ram
 open Lax759944.BinaryWordEncoding
 open Polynomial Turing
 

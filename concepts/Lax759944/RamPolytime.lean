@@ -1,4 +1,4 @@
-import Lax865980.Ram
+import Lax808846.Ram
 import Lax759944.BinaryWordEncoding
 import Mathlib.Algebra.Polynomial.Eval.Defs
 
@@ -18,6 +18,12 @@ of the bounded length, and at every word length at least that bound the program
 returns the exact output within the bounded number of RAM instructions. Both
 polynomials are evaluated at *n*.
 
+The length prefix is this submission's explicit encoding, supplied unchanged
+to Lax808846's read-only input array and sequential tape. It is not added by
+the machine. Working memory starts at zero and output is append-only. Programs
+may use EOF testing, input length, and indexed input; an executed terminal
+instruction is included in the time bound.
+
 Measuring input size in bits, rather than in the number of entries, puts the
 RAM and Turing machine on the same input-size scale. Requiring correctness
 at every sufficiently large word length makes the program uniform in the
@@ -30,7 +36,7 @@ native input entries, and all exact output entries are representable.
 
 namespace Lax759944.RamPolytime
 
-open Lax865980.Ram
+open Lax808846.Ram
 open Lax759944.BinaryWordEncoding
 
 /-- Every entry of `x` is representable by a word of `w` bits. -/
@@ -38,10 +44,9 @@ def FitsInWords (w : ℕ) (x : List ℕ) : Prop :=
   ∀ a ∈ x, a < 2 ^ w
 
 /-- Polynomial-time computation by one uniform word-RAM program, measured
-in the bit-size of the logical word-list input.  The physical input tape is
-length-prefixed, so a program can consume exactly the logical input and then
-continue computing even though the underlying RAM's exhausted-input behavior
-is an unconditional halt. -/
+in the bit-size of the logical word-list input. The physical input is explicitly
+length-prefixed. All instructions of Lax808846 are available, including access
+to the immutable original input independently of sequential reads. -/
 def RamPolytime (f : List ℕ → List ℕ) : Prop :=
   ∃ (p : Program) (wordBound timeBound : Polynomial ℕ),
     ∀ x : List ℕ,

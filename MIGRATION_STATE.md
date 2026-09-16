@@ -1,3 +1,17 @@
+# Current correction: Lax808846
+
+The active rebase targets registered `Lax808846` at commit
+`9394e531cc51cb67a0214bca3f9264dfe97ba5c7`. Public statements use its
+complete instruction set, immutable input tape, sequential input cursor,
+append-only output, and charged terminal instruction. The former compiler is
+an explicitly internal language under `Lax759944Proofs.Legacy`; checked
+embedding and input-buffer simulation connect it to the public model.
+See `CURRENT_STATE.md` for completed checks and remaining validation.
+
+The following records the earlier migration and is retained as history.
+
+---
+
 # Lax759944: migration to current Lax865980
 
 Validated locally on 2026-09-06: full concept/proof build, statement inspection,

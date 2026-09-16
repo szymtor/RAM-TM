@@ -2,7 +2,7 @@ import Lax759944Proofs.TMToRam.NativeMachine
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 
 def exprScalarNames : Expr → List String
   | .lit _ => []

@@ -1,6 +1,6 @@
 import Lax759944Proofs.Microcode
-import Lax759944.RamPolytime
-import Lax759944.TuringRamEquivalence
+import Lax759944Proofs.Legacy.RamPolytime
+import Lax759944Proofs.Legacy.TuringRamEquivalence
 
 /-!
 Translation from the current cell-to-cell RAM to the proof-internal
@@ -13,7 +13,7 @@ namespace Lax759944Proofs.CellToMicrocode
 
 abbrev Block := Microcode.Instr × Microcode.Instr × Microcode.Instr
 
-def lower : Lax865980.Ram.Instr → Block
+def lower : Lax759944Proofs.Legacy.Ram.Instr → Block
   | .set a n => (.load (.lit n), .store a, .load (.lit 0))
   | .load a b => (.load (.ind b), .store a, .load (.lit 0))
   | .store a b => (.load (.mem b), .storeInd a, .load (.lit 0))
@@ -30,14 +30,14 @@ def lower : Lax865980.Ram.Instr → Block
   | .read a => (.read a, .load (.lit 0), .load (.lit 0))
   | .write a => (.write (.mem a), .load (.lit 0), .load (.lit 0))
 
-def block (i : Lax865980.Ram.Instr) : Microcode.Program :=
+def block (i : Lax759944Proofs.Legacy.Ram.Instr) : Microcode.Program :=
   [(lower i).1, (lower i).2.1, (lower i).2.2]
 
-def compile (p : Lax865980.Ram.Program) : Microcode.Program := p.flatMap block
+def compile (p : Lax759944Proofs.Legacy.Ram.Program) : Microcode.Program := p.flatMap block
 
-@[simp] theorem block_length (i : Lax865980.Ram.Instr) : (block i).length = 3 := rfl
+@[simp] theorem block_length (i : Lax759944Proofs.Legacy.Ram.Instr) : (block i).length = 3 := rfl
 
-@[simp] theorem compile_length (p : Lax865980.Ram.Program) :
+@[simp] theorem compile_length (p : Lax759944Proofs.Legacy.Ram.Program) :
     (compile p).length = 3 * p.length := by
   induction p with
   | nil => rfl
@@ -46,7 +46,7 @@ def compile (p : Lax865980.Ram.Program) : Microcode.Program := p.flatMap block
       simp only [List.length_append, block_length, ih, List.length_cons, Nat.mul_succ]
       omega
 
-theorem compile_get (p : Lax865980.Ram.Program) (pc offset : Nat) (hoff : offset < 3) :
+theorem compile_get (p : Lax759944Proofs.Legacy.Ram.Program) (pc offset : Nat) (hoff : offset < 3) :
     (compile p)[3 * pc + offset]? = p[pc]?.bind (fun i => (block i)[offset]?) := by
   induction p generalizing pc with
   | nil => simp [compile]
@@ -62,27 +62,27 @@ theorem compile_get (p : Lax865980.Ram.Program) (pc offset : Nat) (hoff : offset
           rw [heq]
           exact ih pc
 
-def embed (s : Lax865980.Ram.State) (accumulator : Nat) : Microcode.State :=
+def embed (s : Lax759944Proofs.Legacy.Ram.State) (accumulator : Nat) : Microcode.State :=
   { pc := 3 * s.pc, acc := accumulator, mem := s.mem, inp := s.inp, out := s.out }
 
-def Normalized (w : Nat) (s : Lax865980.Ram.State) : Prop :=
+def Normalized (w : Nat) (s : Lax759944Proofs.Legacy.Ram.State) : Prop :=
   ∀ a, s.mem a < 2 ^ w
 
 theorem normalized_init (w : Nat) (input : List Nat) :
-    Normalized w (Lax865980.Ram.initState input) := by
+    Normalized w (Lax759944Proofs.Legacy.Ram.initState input) := by
   intro a
   exact Nat.two_pow_pos w
 
-theorem normalized_effect {w : Nat} {s s' : Lax865980.Ram.State}
-    {i : Lax865980.Ram.Instr} (hs : Normalized w s)
+theorem normalized_effect {w : Nat} {s s' : Lax759944Proofs.Legacy.Ram.State}
+    {i : Lax759944Proofs.Legacy.Ram.Instr} (hs : Normalized w s)
     (heffect : i.effect w s = some s') : Normalized w s' := by
-  have hwrite (a v : Nat) : ∀ b, Lax865980.Ram.setCell w s.mem a v b < 2 ^ w := by
+  have hwrite (a v : Nat) : ∀ b, Lax759944Proofs.Legacy.Ram.setCell w s.mem a v b < 2 ^ w := by
     intro b
-    simp only [Lax865980.Ram.setCell]
+    simp only [Lax759944Proofs.Legacy.Ram.setCell]
     split
     · exact Nat.mod_lt _ (Nat.two_pow_pos w)
     · exact hs b
-  cases i <;> simp [Lax865980.Ram.Instr.effect] at heffect
+  cases i <;> simp [Lax759944Proofs.Legacy.Ram.Instr.effect] at heffect
   case read a =>
     cases hin : s.inp with
     | nil => simp [hin] at heffect
@@ -94,8 +94,8 @@ theorem normalized_effect {w : Nat} {s s' : Lax865980.Ram.State}
     subst s'
     first | exact hs | exact hwrite _ _
 
-theorem effect_three {w : Nat} {p : Lax865980.Ram.Program}
-    {s s' : Lax865980.Ram.State} {i : Lax865980.Ram.Instr}
+theorem effect_three {w : Nat} {p : Lax759944Proofs.Legacy.Ram.Program}
+    {s s' : Lax759944Proofs.Legacy.Ram.State} {i : Lax759944Proofs.Legacy.Ram.Instr}
     (hfetch : p[s.pc]? = some i) (hs : Normalized w s)
     (heffect : i.effect w s = some s') (accumulator : Nat) :
     ∃ finalAccumulator,
@@ -108,7 +108,7 @@ theorem effect_three {w : Nat} {p : Lax865980.Ram.Program}
   have h2 : (compile p)[3 * s.pc + 2]? = some (lower i).2.2 := by
     simpa [hfetch, block] using compile_get p s.pc 2 (by omega)
   have hmod (a : Nat) : s.mem a % 2 ^ w = s.mem a := Nat.mod_eq_of_lt (hs a)
-  cases i <;> simp [Lax865980.Ram.Instr.effect] at heffect
+  cases i <;> simp [Lax759944Proofs.Legacy.Ram.Instr.effect] at heffect
   case read a =>
     cases hin : s.inp with
     | nil => simp [hin] at heffect
@@ -126,7 +126,7 @@ theorem effect_three {w : Nat} {p : Lax865980.Ram.Program}
       lower, Microcode.Instr.effect, Microcode.Op.value, hmod,
       Nat.add_assoc, Nat.mul_add,
       Microcode.State.mk.injEq] <;>
-      (funext address; simp [Microcode.setCell, Lax865980.Ram.setCell])
+      (funext address; simp [Microcode.setCell, Lax759944Proofs.Legacy.Ram.setCell])
 
 theorem microcode_run_add (w : Nat) (p : Microcode.Program) (m n : Nat)
     (s : Microcode.State) :
@@ -136,27 +136,27 @@ theorem microcode_run_add (w : Nat) (p : Microcode.Program) (m n : Nat)
   | zero => simp [Microcode.run]
   | succ m ih => simp [Nat.succ_add, Microcode.run, ih, Option.bind_assoc]
 
-theorem run_translation {w t : Nat} {p : Lax865980.Ram.Program}
-    {s s' : Lax865980.Ram.State} (hs : Normalized w s)
-    (hrun : Lax865980.Ram.run w p t s = some s') (accumulator : Nat) :
+theorem run_translation {w t : Nat} {p : Lax759944Proofs.Legacy.Ram.Program}
+    {s s' : Lax759944Proofs.Legacy.Ram.State} (hs : Normalized w s)
+    (hrun : Lax759944Proofs.Legacy.Ram.run w p t s = some s') (accumulator : Nat) :
     ∃ finalAccumulator, Microcode.run w (compile p) (3 * t) (embed s accumulator) =
       some (embed s' finalAccumulator) := by
   induction t generalizing s accumulator with
   | zero =>
-      simp [Lax865980.Ram.run] at hrun
+      simp [Lax759944Proofs.Legacy.Ram.run] at hrun
       subst s'
       exact ⟨accumulator, rfl⟩
   | succ t ih =>
-      simp only [Lax865980.Ram.run] at hrun
-      cases hstep : Lax865980.Ram.step w p s with
+      simp only [Lax759944Proofs.Legacy.Ram.run] at hrun
+      cases hstep : Lax759944Proofs.Legacy.Ram.step w p s with
       | none => simp [hstep] at hrun
       | some middle =>
           simp only [hstep, Option.bind_some] at hrun
           cases hfetch : p[s.pc]? with
-          | none => simp [Lax865980.Ram.step, hfetch] at hstep
+          | none => simp [Lax759944Proofs.Legacy.Ram.step, hfetch] at hstep
           | some i =>
               have heffect : i.effect w s = some middle := by
-                simpa [Lax865980.Ram.step, hfetch] using hstep
+                simpa [Lax759944Proofs.Legacy.Ram.step, hfetch] using hstep
               obtain ⟨middleAccumulator, hthree⟩ := effect_three hfetch hs heffect accumulator
               obtain ⟨finalAccumulator, hrest⟩ := ih (normalized_effect hs heffect)
                 hrun middleAccumulator
@@ -164,8 +164,8 @@ theorem run_translation {w t : Nat} {p : Lax865980.Ram.Program}
               rw [show 3 * (t + 1) = 3 + 3 * t by omega, microcode_run_add, hthree]
               exact hrest
 
-theorem halt_translation {w : Nat} {p : Lax865980.Ram.Program} {s : Lax865980.Ram.State}
-    (hhalt : Lax865980.Ram.step w p s = none) (accumulator : Nat) :
+theorem halt_translation {w : Nat} {p : Lax759944Proofs.Legacy.Ram.Program} {s : Lax759944Proofs.Legacy.Ram.State}
+    (hhalt : Lax759944Proofs.Legacy.Ram.step w p s = none) (accumulator : Nat) :
     Microcode.step w (compile p) (embed s accumulator) = none := by
   have h0 := compile_get p s.pc 0 (by omega)
   cases hfetch : p[s.pc]? with
@@ -174,10 +174,10 @@ theorem halt_translation {w : Nat} {p : Lax865980.Ram.Program} {s : Lax865980.Ra
       simp [Microcode.step, embed, hfirst]
   | some i =>
       have heffect : i.effect w s = none := by
-        simpa [Lax865980.Ram.step, hfetch] using hhalt
+        simpa [Lax759944Proofs.Legacy.Ram.step, hfetch] using hhalt
       have hfirst : (compile p)[3 * s.pc]? = some (lower i).1 := by
         simpa [hfetch, block] using h0
-      cases i <;> simp [Lax865980.Ram.Instr.effect] at heffect
+      cases i <;> simp [Lax759944Proofs.Legacy.Ram.Instr.effect] at heffect
       case halt => simp [Microcode.step, embed, hfirst, lower, Microcode.Instr.effect]
       case read a =>
         cases hin : s.inp with
@@ -186,8 +186,8 @@ theorem halt_translation {w : Nat} {p : Lax865980.Ram.Program} {s : Lax865980.Ra
 
 /-- Exact execution preservation, with the same width and exactly three
 microcode steps per current RAM instruction. -/
-theorem runsTo {w t : Nat} {p : Lax865980.Ram.Program} {input output : List Nat}
-    (hrun : Lax865980.Ram.RunsTo w p input output t) :
+theorem runsTo {w t : Nat} {p : Lax759944Proofs.Legacy.Ram.Program} {input output : List Nat}
+    (hrun : Lax759944Proofs.Legacy.Ram.RunsTo w p input output t) :
     Microcode.RunsTo w (compile p) input output (3 * t) := by
   obtain ⟨s, hrun, hhalt, hout⟩ := hrun
   obtain ⟨accumulator, hmicro⟩ := run_translation (normalized_init w input) hrun 0
@@ -195,9 +195,9 @@ theorem runsTo {w t : Nat} {p : Lax865980.Ram.Program} {input output : List Nat}
 
 /-- Transfer the public polynomial-time hypothesis to the internal simulator.
 Only the time polynomial changes, by a factor of three. -/
-theorem polytime {f : List Nat → List Nat} (hf : Lax759944.RamPolytime.RamPolytime f) :
+theorem polytime {f : List Nat → List Nat} (hf : Lax759944Proofs.Legacy.RamPolytime.RamPolytime f) :
     ∃ (p : Microcode.Program) (wordBound timeBound : Polynomial Nat),
-      ∀ x, Lax759944.RamPolytime.FitsInWords
+      ∀ x, Lax759944Proofs.Legacy.RamPolytime.FitsInWords
           (wordBound.eval (Lax759944.BinaryWordEncoding.bitSize x)) ((x.length :: x) ++ f x) ∧
         ∀ w, wordBound.eval (Lax759944.BinaryWordEncoding.bitSize x) ≤ w →
           ∃ t ≤ timeBound.eval (Lax759944.BinaryWordEncoding.bitSize x),
@@ -213,7 +213,7 @@ theorem polytime {f : List Nat → List Nat} (hf : Lax759944.RamPolytime.RamPoly
 
 /-- The threshold function is retained, including its computability proof. -/
 theorem computable {f : List Nat → List Nat}
-    (hf : Lax759944.TuringRamEquivalence.RamComputable f) :
+    (hf : Lax759944Proofs.Legacy.TuringRamEquivalence.RamComputable f) :
     ∃ (p : Microcode.Program) (threshold : List Nat → Nat), Computable threshold ∧
       ∀ x w, threshold x ≤ w → ∃ t, Microcode.RunsTo w p (x.length :: x) (f x) t := by
   obtain ⟨p, threshold, hthreshold, hram⟩ := hf

@@ -1,5 +1,5 @@
 import Lax759944Proofs.TMToRam.NumericSemantics
-import Lax865980Proofs.Imp
+import Lax759944Proofs.Legacy.Imp
 
 /-!
 Compilation of normalized Turing statements to IMP+. A stack with numeric
@@ -11,7 +11,7 @@ arrays with fresh names.
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 def stateVar : String := "tm_state"
 def labelVar : String := "tm_label"

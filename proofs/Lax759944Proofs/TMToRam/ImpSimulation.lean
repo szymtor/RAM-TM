@@ -1,5 +1,5 @@
 import Lax759944Proofs.TMToRam.ImpCompiler
-import Lax865980Proofs.Frame
+import Lax759944Proofs.Legacy.Frame
 import Std.Data.String.ToNat
 import Lax759944Proofs.TMToRam.Simulation
 
@@ -12,7 +12,7 @@ which makes the invariant stable under `pop` without clearing memory.
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 theorem stackName_injective : Function.Injective stackName := by
   intro j k h

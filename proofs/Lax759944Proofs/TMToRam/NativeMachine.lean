@@ -2,7 +2,7 @@ import Lax759944Proofs.TMToRam.OutputCompiler
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 theorem compileNumericStmt_noWrite (q : NumericStmt) (fresh : ℕ) :
     (compileNumericStmt q fresh).com.NoWrite := by

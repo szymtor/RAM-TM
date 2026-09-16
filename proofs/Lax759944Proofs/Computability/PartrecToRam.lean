@@ -4,7 +4,7 @@ import Lax759944Proofs.Encoding
 namespace Lax759944Proofs.Computability.PartrecNativeCodec
 
 open Computability Turing Turing.PartrecToTM2
-open Lax865980.Ram Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944Proofs.Legacy.Ram Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 open Lax759944Proofs.TMToRam Polynomial
 open PartrecFiniteTM2
 

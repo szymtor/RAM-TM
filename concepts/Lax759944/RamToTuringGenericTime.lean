@@ -19,7 +19,7 @@ the bits of every RAM word.
 
 namespace Lax759944.RamToTuringGenericTime
 
-open Lax865980.Ram
+open Lax808846.Ram
 open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
 open Polynomial Turing
 

@@ -4,8 +4,8 @@ import Lax759944Proofs.TMToRam.InterpreterTame
 namespace Lax759944Proofs.Computability.PartrecNativeCodec
 
 open Computability Turing Turing.PartrecToTM2
-open Lax865980Proofs.Imp
-open Lax865980Proofs.Compile Lax865980Proofs.Simulation Lax865980.Ram
+open Lax759944Proofs.Legacy.Imp
+open Lax759944Proofs.Legacy.Compile Lax759944Proofs.Legacy.Simulation Lax759944Proofs.Legacy.Ram
 open Lax759944Proofs.TMToRam
 open PartrecFiniteTM2
 

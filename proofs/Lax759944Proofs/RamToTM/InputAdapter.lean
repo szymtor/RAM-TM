@@ -1,12 +1,12 @@
 import Lax759944Proofs.RamToTM.OutputAdapter
-import Lax759944.RamPolytime
+import Lax759944Proofs.Legacy.RamPolytime
 
 -- Preserve Lean 4.30 elaboration for derived finite instances.
 set_option backward.isDefEq.respectTransparency false
 
 namespace Lax759944Proofs.RamToTM
 
-open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
+open Lax759944.BinaryWordEncoding Lax759944Proofs.Legacy.RamPolytime
 open Polynomial
 
 noncomputable section

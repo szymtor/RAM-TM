@@ -13,7 +13,7 @@ set_option backward.isDefEq.respectTransparency false
 namespace Lax759944Proofs.TMToRam
 
 open Turing
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 /-- Typed formulation of the stack-capacity obligations along one atomic
 statement. -/

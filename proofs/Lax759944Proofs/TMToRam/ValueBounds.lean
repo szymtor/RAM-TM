@@ -2,7 +2,7 @@ import Lax759944Proofs.TMToRam.BoundedSemantics
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 
 theorem exists_bind_pure_iff {α β : Type} (o : Option α) (f : α → β) :
     (∃ b, (o.bind fun a => some (f a)) = some b) ↔ ∃ a, o = some a := by
@@ -363,7 +363,7 @@ end Lax759944Proofs.TMToRam
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 
 /-- The current compiler reserves two additional temporary cells beyond the
 expression-depth budget. Include them in the fixed address-space overhead. -/
@@ -410,7 +410,7 @@ end Lax759944Proofs.TMToRam
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 
 def comBitGrowth : Com → Option ℕ
   | .skip | .read _ => some 1

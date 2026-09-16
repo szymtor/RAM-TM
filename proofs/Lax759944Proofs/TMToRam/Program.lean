@@ -1,12 +1,12 @@
-import Lax865980Proofs.Transfer
+import Lax759944Proofs.Legacy.Transfer
 import Lax759944.TuringPolytime
 
 /-!
-The Turing-to-RAM simulation is implemented through Lax865980's verified IMP+
+The Turing-to-RAM simulation is implemented through Lax759944Proofs.Legacy's verified IMP+
 compiler. A finite Turing machine is first specialized to tables of natural
 numbers encoding its finite stack, label, symbol, and state types. The IMP+
 interpreter operates on those tables and on arrays representing the stacks;
-`Lax865980Proofs.Transfer` then supplies the low-level RAM program and its exact
+`Lax759944Proofs.Legacy.Transfer` then supplies the low-level RAM program and its exact
 simulation theorem.
 
 This module fixes the numeric representation of a finite type. The concrete

@@ -2,7 +2,7 @@ import Lax759944Proofs.TMToRam.ValueBounds
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 attribute [aesop safe apply] ExprTame.lit ExprTame.var ExprTame.get
   ExprTame.add ExprTame.sub ExprTame.div ExprTame.mul_lit_right

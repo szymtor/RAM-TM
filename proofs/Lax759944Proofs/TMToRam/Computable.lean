@@ -3,7 +3,7 @@ import Lax759944Proofs.TMToRam.NativeBounded
 namespace Lax759944Proofs.TMToRam
 
 open Lax759944.BinaryWordEncoding
-open Lax865980.Ram Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944Proofs.Legacy.Ram Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 open Polynomial
 
 /-- A finite Turing machine with an arbitrary per-input numerical

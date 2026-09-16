@@ -1,4 +1,4 @@
-import Lax759944.RamPolytime
+import Lax759944Proofs.Legacy.RamPolytime
 import Lax759944.TuringPolytime
 import Lax759944Proofs.Encoding
 import Mathlib.Tactic.GCongr

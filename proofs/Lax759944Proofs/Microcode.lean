@@ -1,12 +1,12 @@
-import Lax865980.Ram
+import Lax759944Proofs.Legacy.Ram
 
 /-!
 Proof-internal accumulator microcode for the Turing simulator. Based on the
-Lax865980 accumulator semantics at d35ba57ad420ce6a6d3c763aa7f6a4a8be1d406d,
+Lax759944Proofs.Legacy accumulator semantics at d35ba57ad420ce6a6d3c763aa7f6a4a8be1d406d,
 with a word-complement operation added for the cell-to-cell translation.
 
 This is NOT the public RAM model. Public programs and executions use
-`Lax865980.Ram`; a separate checked translation must connect them to this
+`Lax759944Proofs.Legacy.Ram`; a separate checked translation must connect them to this
 intermediate language. The accumulator is represented by a Turing work tape.
 -/
 

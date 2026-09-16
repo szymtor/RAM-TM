@@ -1,11 +1,11 @@
 import Lax759944Proofs.TMToRam.NativeBounded
-import Lax759944.RamPolytime
+import Lax759944Proofs.Legacy.RamPolytime
 import Lax759944.TuringPolytime
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax759944.BinaryWordEncoding Lax759944.RamPolytime Lax759944.TuringPolytime
-open Lax865980.Ram Lax865980Proofs.Imp Lax865980Proofs.Compile
+open Lax759944.BinaryWordEncoding Lax759944Proofs.Legacy.RamPolytime Lax759944.TuringPolytime
+open Lax759944Proofs.Legacy.Ram Lax759944Proofs.Legacy.Imp Lax759944Proofs.Legacy.Compile
 open Polynomial
 
 /-- The forward polynomial-time simulation: every finite multi-tape Turing

@@ -2,7 +2,7 @@ import Lax759944Proofs.TMToRam.IOCompiler
 
 namespace Lax759944Proofs.TMToRam
 
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 @[simp] theorem outputValueVar_ne_outputPlaceVar : outputValueVar ≠ outputPlaceVar := by
   decide

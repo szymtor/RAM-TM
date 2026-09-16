@@ -14,7 +14,7 @@ set_option backward.isDefEq.respectTransparency false
 namespace Lax759944Proofs.TMToRam
 
 open Turing
-open Lax865980Proofs.Imp
+open Lax759944Proofs.Legacy.Imp
 
 theorem tableName_injective : Function.Injective tableName := by
   intro i j h
